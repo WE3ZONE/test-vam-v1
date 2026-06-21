@@ -1,101 +1,70 @@
-import Image from "next/image";
+'use client';
 
-export default function Home() {
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/components/AuthContext';
+import { useApp } from '@/components/AppContext';
+
+export default function HomePage() {
+  const auth = useAuth();
+  const app = useApp();
+  const router = useRouter();
+
+  function handleSell() {
+    if (auth.isLoggedIn) {
+      router.push('/new-ad');
+    } else {
+      auth.setPendingNavigation('/new-ad');
+      auth.openLoginModal();
+    }
+  }
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div className="flex-1 flex flex-col items-center justify-center py-16 px-4 bg-gradient-to-b from-divar-bg to-[#111] animate-fadeIn">
+      <div className="max-w-3xl w-full text-center mt-8 md:mt-16">
+        <h1 className="text-4xl md:text-6xl font-black text-white mb-6 leading-tight">
+          خرید و فروش <span className="text-divar-primary">امن</span> امتیاز وام
+        </h1>
+        <p className="text-divar-muted text-lg md:text-xl mb-12 leading-relaxed">
+          پلتفرم واسطه‌گری مالی (معامله امن) برای اتصال فروشندگان امتیاز وام و خریداران. با تضمین امنیت معامله، امتیاز وام خود را نقد کنید یا وام مورد نیاز خود را بخرید.
+        </p>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+        <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+          <Link
+            href="/listings"
+            className="bg-divar-surface border border-divar-border hover:bg-divar-surfaceHover text-white px-8 py-4 rounded-xl font-bold transition flex items-center justify-center gap-3 text-lg w-full sm:w-auto shadow-lg"
           >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            <i className="fa-solid fa-magnifying-glass" />
+            خرید امتیاز وام
+          </Link>
+          <button
+            onClick={handleSell}
+            className="bg-divar-primary hover:bg-divar-primaryHover text-white px-8 py-4 rounded-xl font-bold transition flex items-center justify-center gap-3 text-lg shadow-lg shadow-red-900/30 w-full sm:w-auto"
           >
-            Read our docs
-          </a>
+            <i className="fa-solid fa-tags" />
+            فروش امتیاز وام
+          </button>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 border-t border-divar-border pt-10">
+          <div className="text-center">
+            <div className="text-2xl font-bold text-white mb-1">+{app.users.filter(u => u.kycStatus === 'verified').length * 2500}</div>
+            <div className="text-xs text-divar-muted">کاربر احراز هویت شده</div>
+          </div>
+          <div className="text-center">
+            <div className="text-2xl font-bold text-white mb-1">{app.listings.filter(l => l.status === 'published').length} آگهی</div>
+            <div className="text-xs text-divar-muted">آگهی فعال</div>
+          </div>
+          <div className="text-center">
+            <div className="text-2xl font-bold text-brand-500 mb-1">معامله امن</div>
+            <div className="text-xs text-divar-muted">تضمین پرداخت امن</div>
+          </div>
+          <div className="text-center">
+            <div className="text-2xl font-bold text-green-400 mb-1">{app.transactions.filter(t => t.status === 'completed').length}+</div>
+            <div className="text-xs text-divar-muted">معامله موفق</div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
