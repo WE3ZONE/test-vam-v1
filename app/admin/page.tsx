@@ -49,7 +49,7 @@ export default function AdminPage() {
 
   return (
     <div className="max-w-[1440px] mx-auto w-full px-4 py-4 md:py-8 animate-fadeIn">
-      <h1 className="text-xl md:text-2xl font-bold text-white mb-4 md:mb-6 flex items-center gap-2">
+      <h1 className="text-xl md:text-2xl font-bold text-divar-text mb-4 md:mb-6 flex items-center gap-2">
         <i className="fa-solid fa-shield-halved text-brand-400" /> پنل مدیریت
       </h1>
 
@@ -61,7 +61,7 @@ export default function AdminPage() {
           {/* Dashboard */}
           {activeTab === 'dashboard' && (
             <div>
-              <h2 className="text-lg font-bold text-white mb-4">نمای کلی</h2>
+              <h2 className="text-lg font-bold text-divar-text mb-4">نمای کلی</h2>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
                 {[
                   { label: 'کل کاربران', value: app.users.length, icon: 'fa-users', color: 'text-brand-500' },
@@ -75,17 +75,17 @@ export default function AdminPage() {
                 ].map(s => (
                   <div key={s.label} className="bg-divar-bg border border-divar-border rounded-lg p-3 md:p-4 text-center">
                     <i className={`fa-solid ${s.icon} ${s.color} text-lg md:text-xl mb-2`} />
-                    <div className="text-lg md:text-xl font-bold text-white">{s.value}</div>
+                    <div className="text-lg md:text-xl font-bold text-divar-text">{s.value}</div>
                     <div className="text-[10px] text-divar-muted">{s.label}</div>
                   </div>
                 ))}
               </div>
-              <h3 className="text-sm font-bold text-white mb-3">آخرین فعالیت‌ها</h3>
+              <h3 className="text-sm font-bold text-divar-text mb-3">آخرین فعالیت‌ها</h3>
               <div className="space-y-2">
                 {app.auditLog.slice(0, 5).map(log => (
                   <div key={log.id} className="bg-divar-bg border border-divar-border rounded-lg p-3 flex items-center gap-3 text-xs">
                     <i className="fa-solid fa-clock text-divar-muted" />
-                    <div className="flex-1"><span className="text-white font-medium">{log.action}</span> — <span className="text-gray-300">{log.details}</span></div>
+                    <div className="flex-1"><span className="text-divar-text font-medium">{log.action}</span> — <span className="text-divar-text">{log.details}</span></div>
                     <span className="text-divar-muted text-[10px] flex-shrink-0">{log.timestamp}</span>
                   </div>
                 ))}
@@ -96,7 +96,7 @@ export default function AdminPage() {
           {/* Users - List */}
           {activeTab === 'users' && !selectedUserData && (
             <div>
-              <h2 className="text-lg font-bold text-white mb-4">مدیریت کاربران ({app.users.length})</h2>
+              <h2 className="text-lg font-bold text-divar-text mb-4">مدیریت کاربران ({app.users.length})</h2>
               <div className="space-y-3">
                 {app.users.map(u => (
                   <button key={u.id} onClick={() => setSelectedUser(u.id)} className="w-full bg-divar-bg border border-divar-border rounded-lg p-4 text-right hover:border-brand-500/50 transition">
@@ -104,7 +104,7 @@ export default function AdminPage() {
                       <div className="w-10 h-10 rounded-full bg-divar-surface border border-divar-border flex items-center justify-center text-divar-muted flex-shrink-0"><i className="fa-solid fa-user" /></div>
                       <div className="flex-1 min-w-0">
                         <div className="flex justify-between items-center mb-1">
-                          <span className="text-white font-medium text-sm">{u.name}</span>
+                          <span className="text-divar-text font-medium text-sm">{u.name}</span>
                           <StatusBadge type="kyc" status={u.kycStatus} />
                         </div>
                         <div className="text-xs text-divar-muted flex items-center gap-3">
@@ -125,11 +125,11 @@ export default function AdminPage() {
           {/* Users - Detail */}
           {activeTab === 'users' && selectedUserData && (
             <div>
-              <button onClick={() => setSelectedUser(null)} className="text-divar-muted hover:text-white transition flex items-center gap-2 mb-4 text-sm"><i className="fa-solid fa-arrow-right" /> بازگشت</button>
+              <button onClick={() => setSelectedUser(null)} className="text-divar-muted hover:text-divar-text transition flex items-center gap-2 mb-4 text-sm"><i className="fa-solid fa-arrow-right" /> بازگشت</button>
               <div className="flex items-start gap-4 mb-6">
                 <div className="w-14 h-14 rounded-full bg-divar-bg border-2 border-brand-500 flex items-center justify-center text-brand-500 text-xl flex-shrink-0"><i className="fa-solid fa-user" /></div>
                 <div>
-                  <h2 className="text-lg font-bold text-white">{selectedUserData.name}</h2>
+                  <h2 className="text-lg font-bold text-divar-text">{selectedUserData.name}</h2>
                   <div className="text-xs text-divar-muted mt-1 flex items-center gap-3 flex-wrap">
                     <span className="font-mono" dir="ltr">{selectedUserData.phone}</span>
                     <span>{selectedUserData.city}</span>
@@ -142,10 +142,10 @@ export default function AdminPage() {
                 <div className="bg-divar-bg border border-divar-border rounded-lg p-4">
                   <h3 className="text-xs text-divar-muted mb-2">اطلاعات هویتی</h3>
                   <div className="space-y-2 text-sm">
-                    <div className="flex justify-between"><span className="text-divar-muted">کد ملی:</span><span className="text-white font-mono" dir="ltr">{selectedUserData.nationalId || '—'}</span></div>
-                    <div className="flex justify-between"><span className="text-divar-muted">شماره شبا:</span><span className="text-white font-mono text-xs" dir="ltr">{selectedUserData.iban || '—'}</span></div>
-                    <div className="flex justify-between"><span className="text-divar-muted">شماره کارت:</span><span className="text-white font-mono" dir="ltr">{selectedUserData.cardNumber || '—'}</span></div>
-                    <div className="flex justify-between"><span className="text-divar-muted">تاریخ عضویت:</span><span className="text-white">{selectedUserData.createdAt}</span></div>
+                    <div className="flex justify-between"><span className="text-divar-muted">کد ملی:</span><span className="text-divar-text font-mono" dir="ltr">{selectedUserData.nationalId || '—'}</span></div>
+                    <div className="flex justify-between"><span className="text-divar-muted">شماره شبا:</span><span className="text-divar-text font-mono text-xs" dir="ltr">{selectedUserData.iban || '—'}</span></div>
+                    <div className="flex justify-between"><span className="text-divar-muted">شماره کارت:</span><span className="text-divar-text font-mono" dir="ltr">{selectedUserData.cardNumber || '—'}</span></div>
+                    <div className="flex justify-between"><span className="text-divar-muted">تاریخ عضویت:</span><span className="text-divar-text">{selectedUserData.createdAt}</span></div>
                   </div>
                 </div>
                 <div className="bg-divar-bg border border-divar-border rounded-lg p-4">
@@ -153,7 +153,7 @@ export default function AdminPage() {
                   <div className="space-y-2">
                     {selectedUserData.kycDocuments.map(d => (
                       <div key={d.type} className="flex items-center justify-between text-sm">
-                        <span className="text-white">{d.type}</span>
+                        <span className="text-divar-text">{d.type}</span>
                         <span className={`text-xs flex items-center gap-1 ${d.uploaded ? (d.verified ? 'text-green-400' : 'text-yellow-500') : 'text-red-400'}`}>
                           <i className={`fa-solid ${d.uploaded ? (d.verified ? 'fa-check-circle' : 'fa-clock') : 'fa-xmark'}`} />
                           {d.uploaded ? (d.verified ? 'تایید شده' : 'بررسی نشده') : 'آپلود نشده'}
@@ -166,9 +166,9 @@ export default function AdminPage() {
               <div className="bg-divar-bg border border-divar-border rounded-lg p-4 mb-4">
                 <h3 className="text-xs text-divar-muted mb-2">آمار کاربر</h3>
                 <div className="grid grid-cols-3 gap-4 text-center text-sm">
-                  <div><div className="text-white font-bold">{app.listings.filter(l => l.sellerId === selectedUserData.id).length}</div><div className="text-[10px] text-divar-muted">آگهی</div></div>
-                  <div><div className="text-white font-bold">{app.transactions.filter(t => t.buyerId === selectedUserData.id || t.sellerId === selectedUserData.id).length}</div><div className="text-[10px] text-divar-muted">تراکنش</div></div>
-                  <div><div className="text-white font-bold">{app.tickets.filter(t => t.userId === selectedUserData.id).length}</div><div className="text-[10px] text-divar-muted">تیکت</div></div>
+                  <div><div className="text-divar-text font-bold">{app.listings.filter(l => l.sellerId === selectedUserData.id).length}</div><div className="text-[10px] text-divar-muted">آگهی</div></div>
+                  <div><div className="text-divar-text font-bold">{app.transactions.filter(t => t.buyerId === selectedUserData.id || t.sellerId === selectedUserData.id).length}</div><div className="text-[10px] text-divar-muted">تراکنش</div></div>
+                  <div><div className="text-divar-text font-bold">{app.tickets.filter(t => t.userId === selectedUserData.id).length}</div><div className="text-[10px] text-divar-muted">تیکت</div></div>
                 </div>
               </div>
               <div className="flex gap-3 flex-wrap">
@@ -191,7 +191,7 @@ export default function AdminPage() {
           {/* Verification Queue */}
           {activeTab === 'verification' && (
             <div>
-              <h2 className="text-lg font-bold text-white mb-4">صف احراز هویت ({pendingVerifications.length})</h2>
+              <h2 className="text-lg font-bold text-divar-text mb-4">صف احراز هویت ({pendingVerifications.length})</h2>
               {pendingVerifications.length === 0 ? (
                 <div className="text-center text-divar-muted py-12"><i className="fa-solid fa-check-circle text-3xl text-green-500 mb-3" /><p>صف خالی است</p></div>
               ) : (
@@ -199,10 +199,10 @@ export default function AdminPage() {
                   {pendingVerifications.map(u => (
                     <div key={u.id} className="bg-divar-bg border border-divar-border rounded-lg p-4">
                       <div className="flex justify-between items-start mb-3">
-                        <div><h3 className="text-white font-bold">{u.name}</h3><div className="text-xs text-divar-muted font-mono" dir="ltr">{u.phone} | {u.nationalId}</div></div>
+                        <div><h3 className="text-divar-text font-bold">{u.name}</h3><div className="text-xs text-divar-muted font-mono" dir="ltr">{u.phone} | {u.nationalId}</div></div>
                         <StatusBadge type="kyc" status={u.kycStatus} />
                       </div>
-                      <div className="text-xs text-gray-300 mb-3">
+                      <div className="text-xs text-divar-text mb-3">
                         <span className="text-divar-muted">مدارک: </span>
                         {u.kycDocuments.map(d => <span key={d.type} className={`ml-2 ${d.uploaded ? 'text-green-400' : 'text-red-400'}`}><i className={`fa-solid ${d.uploaded ? 'fa-check' : 'fa-xmark'} ml-1`} />{d.type}</span>)}
                       </div>
@@ -221,8 +221,8 @@ export default function AdminPage() {
           {activeTab === 'listings' && !selectedListingData && (
             <div>
               <div className="flex justify-between items-center mb-4 gap-3 flex-wrap">
-                <h2 className="text-lg font-bold text-white">مدیریت آگهی‌ها ({filteredListings.length})</h2>
-                <select value={listingFilter} onChange={e => setListingFilter(e.target.value as ListingStatus | '')} className="bg-divar-bg border border-divar-border text-white text-xs rounded-md px-3 py-2 outline-none">
+                <h2 className="text-lg font-bold text-divar-text">مدیریت آگهی‌ها ({filteredListings.length})</h2>
+                <select value={listingFilter} onChange={e => setListingFilter(e.target.value as ListingStatus | '')} className="bg-divar-bg border border-divar-border text-divar-text text-xs rounded-md px-3 py-2 outline-none">
                   <option value="">همه وضعیت‌ها</option>
                   <option value="pending_verification">در انتظار بررسی</option>
                   <option value="published">منتشر شده</option>
@@ -239,7 +239,7 @@ export default function AdminPage() {
                     <button key={l.id} onClick={() => setSelectedListing(l.id)} className="w-full bg-divar-bg border border-divar-border rounded-lg p-4 text-right hover:border-brand-500/50 transition">
                       <div className="flex justify-between items-start mb-1 gap-2">
                         <div className="flex-1 min-w-0">
-                          <div className="text-white text-sm font-bold truncate">{l.bank} — {l.amount} تومان</div>
+                          <div className="text-divar-text text-sm font-bold truncate">{l.bank} — {l.amount} تومان</div>
                           <div className="text-[11px] text-divar-muted mt-0.5 flex items-center gap-2 flex-wrap">
                             <span className="font-mono">L-{l.id}</span>
                             <span>{loanTypeLabels[l.loanType]}</span>
@@ -259,10 +259,10 @@ export default function AdminPage() {
           {/* Listings - Detail */}
           {activeTab === 'listings' && selectedListingData && (
             <div>
-              <button onClick={() => setSelectedListing(null)} className="text-divar-muted hover:text-white transition flex items-center gap-2 mb-4 text-sm"><i className="fa-solid fa-arrow-right" /> بازگشت</button>
+              <button onClick={() => setSelectedListing(null)} className="text-divar-muted hover:text-divar-text transition flex items-center gap-2 mb-4 text-sm"><i className="fa-solid fa-arrow-right" /> بازگشت</button>
               <div className="flex justify-between items-start mb-4">
                 <div>
-                  <h2 className="text-lg font-bold text-white">آگهی L-{selectedListingData.id}</h2>
+                  <h2 className="text-lg font-bold text-divar-text">آگهی L-{selectedListingData.id}</h2>
                   <div className="text-xs text-divar-muted mt-1">{selectedListingData.bank} | {loanTypeLabels[selectedListingData.loanType]} | {selectedListingData.location}</div>
                 </div>
                 <StatusBadge type="listing" status={selectedListingData.status} />
@@ -271,11 +271,11 @@ export default function AdminPage() {
                 <div className="bg-divar-bg border border-divar-border rounded-lg p-4">
                   <h3 className="text-xs text-divar-muted mb-3">اطلاعات وام</h3>
                   <div className="space-y-2 text-sm">
-                    <div className="flex justify-between"><span className="text-divar-muted">مبلغ وام:</span><span className="text-white font-bold">{selectedListingData.amount} تومان</span></div>
-                    <div className="flex justify-between"><span className="text-divar-muted">اقساط:</span><span className="text-white">{selectedListingData.installments} ماهه</span></div>
-                    <div className="flex justify-between"><span className="text-divar-muted">نرخ سود:</span><span className="text-white">{selectedListingData.interest}</span></div>
-                    <div className="flex justify-between"><span className="text-divar-muted">مدت:</span><span className="text-white">{selectedListingData.duration}</span></div>
-                    <div className="flex justify-between"><span className="text-divar-muted">قیمت فروش:</span><span className="text-white font-bold">{selectedListingData.price} تومان</span></div>
+                    <div className="flex justify-between"><span className="text-divar-muted">مبلغ وام:</span><span className="text-divar-text font-bold">{selectedListingData.amount} تومان</span></div>
+                    <div className="flex justify-between"><span className="text-divar-muted">اقساط:</span><span className="text-divar-text">{selectedListingData.installments} ماهه</span></div>
+                    <div className="flex justify-between"><span className="text-divar-muted">نرخ سود:</span><span className="text-divar-text">{selectedListingData.interest}</span></div>
+                    <div className="flex justify-between"><span className="text-divar-muted">مدت:</span><span className="text-divar-text">{selectedListingData.duration}</span></div>
+                    <div className="flex justify-between"><span className="text-divar-muted">قیمت فروش:</span><span className="text-divar-text font-bold">{selectedListingData.price} تومان</span></div>
                     <div className="flex justify-between"><span className="text-divar-muted">پیشنهاد سیستم:</span><span className="text-brand-400">{selectedListingData.suggestedPrice} تومان</span></div>
                   </div>
                 </div>
@@ -283,9 +283,9 @@ export default function AdminPage() {
                   <h3 className="text-xs text-divar-muted mb-3">اطلاعات فروشنده</h3>
                   {(() => { const s = app.getUserById(selectedListingData.sellerId); return s ? (
                     <div className="space-y-2 text-sm">
-                      <div className="flex justify-between"><span className="text-divar-muted">نام:</span><span className="text-white">{s.name}</span></div>
-                      <div className="flex justify-between"><span className="text-divar-muted">تلفن:</span><span className="text-white font-mono" dir="ltr">{s.phone}</span></div>
-                      <div className="flex justify-between"><span className="text-divar-muted">شهر:</span><span className="text-white">{s.city}</span></div>
+                      <div className="flex justify-between"><span className="text-divar-muted">نام:</span><span className="text-divar-text">{s.name}</span></div>
+                      <div className="flex justify-between"><span className="text-divar-muted">تلفن:</span><span className="text-divar-text font-mono" dir="ltr">{s.phone}</span></div>
+                      <div className="flex justify-between"><span className="text-divar-muted">شهر:</span><span className="text-divar-text">{s.city}</span></div>
                       <div className="flex justify-between"><span className="text-divar-muted">احراز هویت:</span><StatusBadge type="kyc" status={s.kycStatus} /></div>
                     </div>
                   ) : <span className="text-divar-muted text-xs">نامشخص</span>; })()}
@@ -294,19 +294,19 @@ export default function AdminPage() {
               {selectedListingData.guarantorRequirements && (
                 <div className="bg-divar-bg border border-divar-border rounded-lg p-4 mb-4">
                   <h3 className="text-xs text-divar-muted mb-2">شرایط ضامن</h3>
-                  <p className="text-sm text-gray-300">{selectedListingData.guarantorRequirements}</p>
+                  <p className="text-sm text-divar-text">{selectedListingData.guarantorRequirements}</p>
                 </div>
               )}
               {selectedListingData.description && (
                 <div className="bg-divar-bg border border-divar-border rounded-lg p-4 mb-4">
                   <h3 className="text-xs text-divar-muted mb-2">توضیحات</h3>
-                  <p className="text-sm text-gray-300">{selectedListingData.description}</p>
+                  <p className="text-sm text-divar-text">{selectedListingData.description}</p>
                 </div>
               )}
               {selectedListingData.rejectionReason && (
                 <div className="bg-red-900/10 border border-red-800/30 rounded-lg p-4 mb-4">
                   <h3 className="text-xs text-red-400 mb-1">دلیل رد:</h3>
-                  <p className="text-sm text-gray-300">{selectedListingData.rejectionReason}</p>
+                  <p className="text-sm text-divar-text">{selectedListingData.rejectionReason}</p>
                 </div>
               )}
               <div className="flex gap-3 flex-wrap">
@@ -327,8 +327,8 @@ export default function AdminPage() {
           {activeTab === 'transactions' && !selectedTrx && (
             <div>
               <div className="flex justify-between items-center mb-4 gap-3 flex-wrap">
-                <h2 className="text-lg font-bold text-white">مدیریت تراکنش‌ها</h2>
-                <select value={transactionFilter} onChange={e => setTransactionFilter(e.target.value as TransactionStatus | '')} className="bg-divar-bg border border-divar-border text-white text-xs rounded-md px-3 py-2 outline-none">
+                <h2 className="text-lg font-bold text-divar-text">مدیریت تراکنش‌ها</h2>
+                <select value={transactionFilter} onChange={e => setTransactionFilter(e.target.value as TransactionStatus | '')} className="bg-divar-bg border border-divar-border text-divar-text text-xs rounded-md px-3 py-2 outline-none">
                   <option value="">همه</option>
                   <option value="requested">درخواست</option>
                   <option value="payment_pending">انتظار پرداخت</option>
@@ -344,10 +344,10 @@ export default function AdminPage() {
                   return (
                     <button key={t.id} onClick={() => setSelectedTransaction(t.id)} className="w-full bg-divar-bg border border-divar-border rounded-lg p-4 text-right hover:border-brand-500/50 transition">
                       <div className="flex justify-between items-start mb-2">
-                        <div className="font-mono text-xs text-gray-300">{t.id}</div>
+                        <div className="font-mono text-xs text-divar-text">{t.id}</div>
                         <StatusBadge type="transaction" status={t.status} />
                       </div>
-                      <div className="text-sm text-white font-medium mb-1">{listing?.bank} — {t.amount} تومان</div>
+                      <div className="text-sm text-divar-text font-medium mb-1">{listing?.bank} — {t.amount} تومان</div>
                       <div className="text-xs text-divar-muted">خریدار: {buyer?.name} | تاریخ: {t.createdAt}</div>
                     </button>
                   );
@@ -358,12 +358,12 @@ export default function AdminPage() {
 
           {activeTab === 'transactions' && selectedTrx && (
             <div>
-              <button onClick={() => setSelectedTransaction(null)} className="text-divar-muted hover:text-white transition flex items-center gap-2 mb-4 text-sm">
+              <button onClick={() => setSelectedTransaction(null)} className="text-divar-muted hover:text-divar-text transition flex items-center gap-2 mb-4 text-sm">
                 <i className="fa-solid fa-arrow-right" /> بازگشت
               </button>
               <div className="flex justify-between items-start mb-4">
                 <div>
-                  <h2 className="text-lg font-bold text-white">{selectedTrx.id}</h2>
+                  <h2 className="text-lg font-bold text-divar-text">{selectedTrx.id}</h2>
                   <div className="text-xs text-divar-muted">{selectedTrx.amount} تومان | کارمزد: {selectedTrx.platformFee}</div>
                 </div>
                 <StatusBadge type="transaction" status={selectedTrx.status} />
@@ -388,7 +388,7 @@ export default function AdminPage() {
           {/* Disputes */}
           {activeTab === 'disputes' && (
             <div>
-              <h2 className="text-lg font-bold text-white mb-4">مدیریت اختلافات ({app.disputes.length})</h2>
+              <h2 className="text-lg font-bold text-divar-text mb-4">مدیریت اختلافات ({app.disputes.length})</h2>
               {app.disputes.length === 0 ? (
                 <div className="text-center text-divar-muted py-12"><p>اختلافی ثبت نشده</p></div>
               ) : (
@@ -398,10 +398,10 @@ export default function AdminPage() {
                     return (
                       <div key={d.id} className="bg-divar-bg border border-divar-border rounded-lg p-4">
                         <div className="flex justify-between items-start mb-2">
-                          <div className="font-mono text-xs text-gray-300">{d.id} — تراکنش {d.transactionId}</div>
-                          <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${d.status === 'open' ? 'bg-red-900/30 text-red-400 border-red-800' : d.status === 'investigating' ? 'bg-yellow-900/30 text-yellow-500 border-yellow-700' : 'bg-green-900/30 text-green-500 border-green-800'}`}>{d.status === 'open' ? 'باز' : d.status === 'investigating' ? 'در حال بررسی' : 'حل شده'}</span>
+                          <div className="font-mono text-xs text-divar-text">{d.id} — تراکنش {d.transactionId}</div>
+                          <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${d.status === 'open' ? 'bg-red-50 text-red-700 border-red-200 dark:bg-red-900/30 dark:text-red-400 dark:border-red-800' : d.status === 'investigating' ? 'bg-yellow-50 text-yellow-700 border-yellow-200 dark:bg-yellow-900/30 dark:text-yellow-400 dark:border-yellow-700' : 'bg-green-50 text-green-700 border-green-200 dark:bg-green-900/30 dark:text-green-400 dark:border-green-800'}`}>{d.status === 'open' ? 'باز' : d.status === 'investigating' ? 'در حال بررسی' : 'حل شده'}</span>
                         </div>
-                        <p className="text-sm text-gray-300 mb-2">{d.reason}</p>
+                        <p className="text-sm text-divar-text mb-2">{d.reason}</p>
                         <div className="text-xs text-divar-muted mb-3">گزارش‌دهنده: {reporter?.name} | تاریخ: {d.createdAt}</div>
                         {d.status === 'open' && (
                           <div className="flex gap-3">
@@ -419,10 +419,10 @@ export default function AdminPage() {
           {/* Reports */}
           {activeTab === 'reports' && (
             <div>
-              <h2 className="text-lg font-bold text-white mb-4">گزارشات</h2>
+              <h2 className="text-lg font-bold text-divar-text mb-4">گزارشات</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                 <div className="bg-divar-bg border border-divar-border rounded-lg p-5 text-center">
-                  <div className="text-2xl font-bold text-white mb-1">{completedTrx.length}</div>
+                  <div className="text-2xl font-bold text-divar-text mb-1">{completedTrx.length}</div>
                   <div className="text-xs text-divar-muted">معاملات موفق</div>
                 </div>
                 <div className="bg-divar-bg border border-divar-border rounded-lg p-5 text-center">
@@ -434,13 +434,13 @@ export default function AdminPage() {
                   <div className="text-xs text-divar-muted">آگهی فعال</div>
                 </div>
               </div>
-              <h3 className="text-sm font-bold text-white mb-3">آگهی‌ها بر اساس بانک</h3>
+              <h3 className="text-sm font-bold text-divar-text mb-3">آگهی‌ها بر اساس بانک</h3>
               <div className="space-y-2">
                 {['رسالت', 'مهر ایران', 'وام ازدواج', 'بانک ملت', 'وام مسکن'].map(bank => {
                   const count = app.listings.filter(l => l.bank.includes(bank.replace('وام ', ''))).length;
                   return (
                     <div key={bank} className="flex items-center gap-3">
-                      <span className="text-xs text-white w-24">{bank}</span>
+                      <span className="text-xs text-divar-text w-24">{bank}</span>
                       <div className="flex-1 bg-divar-bg rounded-full h-4 border border-divar-border overflow-hidden">
                         <div className="h-full bg-brand-600 rounded-full" style={{ width: `${(count / app.listings.length) * 100}%` }} />
                       </div>
@@ -455,15 +455,15 @@ export default function AdminPage() {
           {/* Settings */}
           {activeTab === 'settings' && (
             <div>
-              <h2 className="text-lg font-bold text-white mb-4">تنظیمات</h2>
+              <h2 className="text-lg font-bold text-divar-text mb-4">تنظیمات</h2>
               <div className="space-y-4">
                 <div>
-                  <h3 className="text-sm font-bold text-white mb-3">بانک‌ها و موسسات</h3>
+                  <h3 className="text-sm font-bold text-divar-text mb-3">بانک‌ها و موسسات</h3>
                   <div className="space-y-2">
                     {['بانک رسالت', 'بانک مهر ایران', 'بانک مسکن', 'بانک ملت', 'بانک ملی'].map(bank => (
                       <div key={bank} className="bg-divar-bg border border-divar-border rounded-lg p-3 flex items-center justify-between">
-                        <span className="text-sm text-white">{bank}</span>
-                        <span className="bg-green-900/30 text-green-500 border border-green-800 px-2 py-0.5 rounded text-[10px] font-bold">فعال</span>
+                        <span className="text-sm text-divar-text">{bank}</span>
+                        <span className="bg-green-50 text-green-700 border border-green-200 dark:bg-green-900/30 dark:text-green-400 dark:border-green-800 px-2 py-0.5 rounded text-[10px] font-bold">فعال</span>
                       </div>
                     ))}
                   </div>
@@ -480,10 +480,10 @@ export default function AdminPage() {
         <>
           <div className="fixed inset-0 bg-black/75 z-[100]" onClick={() => setRejectTarget(null)} />
           <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-divar-surface border border-divar-border rounded-xl p-6 w-[90%] max-w-[400px] z-[101] shadow-2xl">
-            <h3 className="text-lg font-bold text-white mb-4">دلیل رد</h3>
-            <textarea value={rejectReason} onChange={e => setRejectReason(e.target.value)} placeholder="دلیل رد را بنویسید..." className="w-full bg-divar-bg border border-divar-border text-white rounded-lg py-3 px-4 mb-4 text-sm focus:outline-none focus:border-brand-500" rows={3} />
+            <h3 className="text-lg font-bold text-divar-text mb-4">دلیل رد</h3>
+            <textarea value={rejectReason} onChange={e => setRejectReason(e.target.value)} placeholder="دلیل رد را بنویسید..." className="w-full bg-divar-bg border border-divar-border text-divar-text rounded-lg py-3 px-4 mb-4 text-sm focus:outline-none focus:border-brand-500" rows={3} />
             <div className="flex gap-3">
-              <button onClick={() => setRejectTarget(null)} className="flex-1 bg-divar-bg border border-divar-border text-white py-2.5 rounded-lg font-bold transition hover:bg-gray-700">انصراف</button>
+              <button onClick={() => setRejectTarget(null)} className="flex-1 bg-divar-bg border border-divar-border text-divar-text py-2.5 rounded-lg font-bold transition hover:bg-divar-surfaceHover">انصراف</button>
               <button onClick={() => {
                 if (rejectTarget.type === 'listing') {
                   app.updateListingStatus(rejectTarget.id as number, 'rejected', rejectReason);

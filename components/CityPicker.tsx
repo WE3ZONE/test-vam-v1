@@ -16,8 +16,8 @@ export default function CityPicker() {
       <div className="fixed inset-0 bg-black/60 z-[90]" onClick={auth.closeCityPicker} />
       <div className="fixed bottom-0 md:bottom-auto md:top-1/2 md:-translate-y-1/2 left-0 right-0 md:left-1/2 md:-translate-x-1/2 md:w-[400px] md:rounded-xl z-[90] bg-divar-surface border-t md:border border-divar-border rounded-t-2xl md:rounded-xl shadow-2xl animate-slideUp md:animate-fadeIn max-h-[85vh] overflow-hidden flex flex-col">
         <div className="p-5 border-b border-divar-border flex items-center justify-between flex-shrink-0">
-          <h3 className="text-lg font-bold text-white">انتخاب شهر</h3>
-          <button onClick={auth.closeCityPicker} className="text-divar-muted hover:text-white transition">
+          <h3 className="text-lg font-bold text-divar-text">انتخاب شهر</h3>
+          <button onClick={auth.closeCityPicker} className="text-divar-muted hover:text-divar-text transition">
             <i className="fa-solid fa-xmark text-lg" />
           </button>
         </div>
@@ -40,7 +40,7 @@ export default function CityPicker() {
               onClick={() => auth.toggleCity(city)}
               className={`w-full flex items-center justify-between p-3.5 rounded-lg text-sm transition mb-1 ${
                 auth.selectedCities.has(city)
-                  ? 'bg-brand-900/20 text-white border border-brand-800'
+                  ? 'bg-brand-900/20 text-divar-text border border-brand-800'
                   : 'text-divar-text hover:bg-divar-bg border border-transparent'
               }`}
             >

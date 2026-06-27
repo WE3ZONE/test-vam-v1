@@ -98,4 +98,12 @@ export const mockListingsExpanded: Listing[] = [
     description: 'معامله تکمیل شده.',
     createdAt: '۱۴۰۳/۰۲/۱۰', views: 410, color: 'blue', icon: 'building-columns',
   },
+  {
+    id: 13, sellerId: 'u3', bank: 'جاویدان', loanType: 'gharz_hasaneh', loanProvider: 'صندوق قرض‌الحسنه جاویدان',
+    amount: '۱۵۰,۰۰۰,۰۰۰', installments: '۴۸', interest: '۲٪', duration: '۴ سال', price: '۱۵,۰۰۰,۰۰۰', suggestedPrice: '۱۴,۰۰۰,۰۰۰',
+    location: 'تهران', province: 'تهران', urgent: false, listingType: 'standard', status: 'published',
+    guarantorRequirements: 'یک ضامن با کسر از حقوق',
+    description: 'وام قرض‌الحسنه صندوق جاویدان. سود ۲ درصد. انتقال در شعب تهران.',
+    createdAt: '۱۴۰۳/۰۳/۱۵', views: 42, color: 'teal', icon: 'leaf',
+  },
 ];

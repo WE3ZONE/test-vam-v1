@@ -17,4 +17,5 @@ export const mockBanks: Bank[] = [
   { id: 3, name: 'وام ازدواج/فرزندآوری', type: 'دولتی', maxAmount: '۵۰۰ میلیون', interest: '۴٪', maxInstallments: '۱۲۰ ماه', color: 'green', active: true },
   { id: 4, name: 'بانک مسکن / اوراق', type: 'تجاری', maxAmount: '۱ میلیارد', interest: '۲۲٪', maxInstallments: '۱۸۰ ماه', color: 'indigo', active: true },
   { id: 5, name: 'بانک ملت', type: 'تجاری', maxAmount: '۲۰۰ میلیون', interest: '۱۸٪', maxInstallments: '۶۰ ماه', color: 'red', active: true },
+  { id: 6, name: 'صندوق جاویدان', type: 'قرض‌الحسنه', maxAmount: '۱۵۰ میلیون', interest: '۲٪', maxInstallments: '۴۸ ماه', color: 'teal', active: true },
 ];

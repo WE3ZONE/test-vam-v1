@@ -23,7 +23,7 @@ export default function StepProgress({ currentStatus }: { currentStatus: Transac
     return (
       <div className="flex items-center gap-2 text-xs">
         <span className={`px-2 py-1 rounded font-bold border ${
-          currentStatus === 'disputed' ? 'bg-red-900/30 text-red-400 border-red-800' : 'bg-gray-800 text-gray-400 border-gray-700'
+          currentStatus === 'disputed' ? 'bg-red-50 text-red-700 border-red-200 dark:bg-red-900/30 dark:text-red-400 dark:border-red-800' : 'bg-divar-bg text-divar-muted border-divar-border'
         }`}>
           {transactionStatusLabels[currentStatus]}
         </span>
@@ -47,7 +47,7 @@ export default function StepProgress({ currentStatus }: { currentStatus: Transac
                 {isPast ? <i className="fa-solid fa-check" /> : i + 1}
               </div>
               <span className={`text-[8px] md:text-[9px] mt-1 text-center leading-tight max-w-[50px] ${
-                isCurrent ? 'text-white font-bold' : isPast ? 'text-green-400' : 'text-divar-muted'
+                isCurrent ? 'text-divar-text font-bold' : isPast ? 'text-green-400' : 'text-divar-muted'
               }`}>
                 {shortLabels[step]}
               </span>

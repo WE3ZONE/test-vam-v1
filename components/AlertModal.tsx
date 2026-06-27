@@ -48,50 +48,31 @@ export function AlertProvider({ children }: { children: ReactNode }) {
     <AlertContext.Provider value={{ showAlert, showConfirm }}>
       {children}
       {open && (
-        <div
-          className="fixed inset-0 bg-black/75 backdrop-blur-sm z-[100] flex items-center justify-center"
-          onClick={() => setOpen(false)}
-        >
-          <div
-            className="bg-divar-surface border border-divar-border rounded-xl w-[90%] max-w-[400px] p-6 shadow-2xl text-center"
-            onClick={e => e.stopPropagation()}
-          >
-            <div className={`w-16 h-16 rounded-full mx-auto flex items-center justify-center text-3xl mb-5 shadow-inner ${
-              type === 'success'
-                ? 'bg-green-900/20 border border-green-800'
-                : type === 'confirm'
-                ? 'bg-red-900/20 border border-red-800'
-                : 'bg-divar-bg border border-divar-border'
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4" onClick={() => setOpen(false)}>
+          <div className="bg-divar-surface border border-divar-border rounded-2xl w-full max-w-[380px] p-6 shadow-2xl text-center" onClick={e => e.stopPropagation()}>
+            <div className={`w-16 h-16 rounded-2xl mx-auto flex items-center justify-center text-3xl mb-5 ${
+              type === 'success' ? 'bg-green-500/10' : type === 'confirm' ? 'bg-red-500/10' : 'bg-brand-500/10'
             }`}>
               <i className={
                 type === 'success' ? 'fa-solid fa-check text-green-500'
                 : type === 'confirm' ? 'fa-solid fa-triangle-exclamation text-red-500'
-                : 'fa-solid fa-bell text-brand-400'
+                : 'fa-solid fa-bell text-brand-500'
               } />
             </div>
-            <h3 className="text-xl font-bold text-white mb-3">{title}</h3>
-            <p className="text-sm text-gray-300 mb-8 leading-relaxed px-2">{message}</p>
+            <h3 className="text-lg font-bold text-divar-text mb-2">{title}</h3>
+            <p className="text-sm text-divar-muted mb-6 leading-relaxed">{message}</p>
 
             {type === 'confirm' ? (
               <div className="flex gap-3">
-                <button
-                  onClick={() => setOpen(false)}
-                  className="flex-1 bg-divar-bg border border-divar-border hover:bg-gray-700 text-white py-3 rounded-lg transition font-bold shadow-sm"
-                >
+                <button onClick={() => setOpen(false)} className="flex-1 bg-divar-bg border border-divar-border hover:bg-divar-surfaceHover text-divar-text py-3 rounded-xl transition-all font-bold cursor-pointer">
                   انصراف
                 </button>
-                <button
-                  onClick={handleConfirm}
-                  className="flex-1 bg-red-700 hover:bg-red-600 text-white py-3 rounded-lg transition font-bold shadow-sm"
-                >
+                <button onClick={handleConfirm} className="flex-1 bg-red-600 hover:bg-red-700 text-white py-3 rounded-xl transition-all font-bold cursor-pointer">
                   حذف
                 </button>
               </div>
             ) : (
-              <button
-                onClick={() => setOpen(false)}
-                className="w-full bg-divar-bg border border-divar-border hover:bg-gray-700 text-white py-3 rounded-lg transition font-bold shadow-sm"
-              >
+              <button onClick={() => setOpen(false)} className="w-full bg-divar-bg border border-divar-border hover:bg-divar-surfaceHover text-divar-text py-3 rounded-xl transition-all font-bold cursor-pointer">
                 متوجه شدم
               </button>
             )}

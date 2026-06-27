@@ -12,6 +12,7 @@ const bankFilters = [
   { label: 'وام مسکن / اوراق', match: 'وام مسکن' },
   { label: 'وام ازدواج / فرزندآوری', match: 'وام ازدواج' },
   { label: 'بانک ملت', match: 'بانک ملت' },
+  { label: 'صندوق جاویدان', match: 'جاویدان' },
 ];
 
 const loanTypes: { value: LoanType; label: string }[] = [
@@ -88,18 +89,26 @@ export default function ListingsPage() {
 
   const filterContent = (
     <>
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="font-bold text-white text-lg">فیلترها</h2>
-        <button onClick={clearFilters} className="text-xs text-divar-primary hover:text-red-400">حذف همه</button>
+      {/* Filter header */}
+      <div className="flex items-center justify-between mb-6 pb-4 border-b border-divar-border">
+        <h2 className="font-bold text-divar-text text-base flex items-center gap-2">
+          <i className="fa-solid fa-filter text-brand-500 text-sm" />
+          فیلترها
+        </h2>
+        <button onClick={clearFilters} className="cursor-pointer text-xs text-red-400 hover:text-red-300 transition-all duration-200 flex items-center gap-1">
+          <i className="fa-solid fa-trash-can text-[10px]" />
+          حذف همه
+        </button>
       </div>
 
+      {/* Bank filters */}
       <div className="mb-6">
-        <h3 className="text-sm font-medium text-divar-muted mb-3">بانک و موسسه</h3>
-        <div className="space-y-3">
+        <h3 className="text-xs font-semibold text-divar-muted mb-3 tracking-wide">بانک و موسسه</h3>
+        <div className="space-y-1">
           {bankFilters.map(bank => (
-            <label key={bank.match} className="flex items-center gap-3 cursor-pointer group">
-              <input type="checkbox" checked={selectedBanks.has(bank.match)} onChange={() => toggleBank(bank.match)} className="rounded bg-divar-bg border-divar-border text-divar-primary focus:ring-divar-primary cursor-pointer w-4 h-4" />
-              <span className="text-sm text-divar-text group-hover:text-white">{bank.label}</span>
+            <label key={bank.match} className="flex items-center gap-3 cursor-pointer group p-2 rounded-xl hover:bg-divar-surfaceHover transition-all duration-200">
+              <input type="checkbox" checked={selectedBanks.has(bank.match)} onChange={() => toggleBank(bank.match)} className="rounded bg-divar-bg border-divar-border text-brand-500 focus:ring-brand-500 cursor-pointer w-4 h-4 flex-shrink-0" />
+              <span className="text-sm text-divar-text group-hover:text-brand-500 transition-all duration-200">{bank.label}</span>
             </label>
           ))}
         </div>
@@ -107,17 +116,18 @@ export default function ListingsPage() {
 
       <hr className="border-divar-border my-5" />
 
+      {/* Loan type filters */}
       <div className="mb-6">
-        <h3 className="text-sm font-medium text-divar-muted mb-3">نوع وام</h3>
+        <h3 className="text-xs font-semibold text-divar-muted mb-3 tracking-wide">نوع وام</h3>
         <div className="flex flex-wrap gap-2">
           {loanTypes.map(lt => (
             <button
               key={lt.value}
               onClick={() => setSelectedLoanType(selectedLoanType === lt.value ? '' : lt.value)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition border ${
+              className={`cursor-pointer px-3.5 py-1.5 rounded-xl text-xs font-medium transition-all duration-200 border ${
                 selectedLoanType === lt.value
-                  ? 'bg-brand-600 text-white border-brand-600'
-                  : 'bg-divar-bg text-divar-muted border-divar-border hover:text-white'
+                  ? 'bg-brand-600 text-white border-brand-600 shadow-sm'
+                  : 'bg-divar-bg text-divar-muted border-divar-border hover:text-divar-text hover:border-brand-500/30 hover:bg-divar-surfaceHover'
               }`}
             >
               {lt.label}
@@ -128,28 +138,31 @@ export default function ListingsPage() {
 
       <hr className="border-divar-border my-5" />
 
-      <div className="mb-4">
-        <label className="flex items-center justify-between cursor-pointer group p-2 rounded-md hover:bg-divar-bg transition -mx-2">
-          <div className="flex items-center gap-2">
-            <i className="fa-solid fa-bolt text-yellow-500" />
-            <span className="text-sm text-divar-text group-hover:text-white font-medium">فقط آگهی‌های فوری</span>
+      {/* Toggle switches */}
+      <div className="space-y-1">
+        <label className="flex items-center justify-between cursor-pointer group p-2.5 rounded-xl hover:bg-divar-surfaceHover transition-all duration-200">
+          <div className="flex items-center gap-2.5">
+            <div className="w-7 h-7 rounded-lg bg-yellow-500/10 flex items-center justify-center">
+              <i className="fa-solid fa-bolt text-yellow-500 text-xs" />
+            </div>
+            <span className="text-sm text-divar-text font-medium">فقط فوری</span>
           </div>
           <div className="relative">
             <input type="checkbox" className="sr-only peer" checked={urgentOnly} onChange={e => setUrgentOnly(e.target.checked)} />
-            <div className="w-9 h-5 bg-divar-bg border border-divar-border rounded-full peer peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:right-[2px] after:bg-divar-muted after:border-gray-300 after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-yellow-600 peer-checked:after:bg-white" />
+            <div className="w-10 h-[22px] bg-divar-bg border border-divar-border rounded-full peer peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:right-[2px] after:bg-divar-muted after:border-divar-border after:rounded-full after:h-[18px] after:w-[18px] after:transition-all duration-200 peer-checked:bg-yellow-500 peer-checked:after:bg-white peer-checked:border-yellow-500" />
           </div>
         </label>
-      </div>
 
-      <div className="mb-2">
-        <label className="flex items-center justify-between cursor-pointer group p-2 rounded-md hover:bg-divar-bg transition -mx-2">
-          <div className="flex items-center gap-2">
-            <i className="fa-solid fa-shield-halved text-brand-500" />
-            <span className="text-sm text-divar-text group-hover:text-white font-medium">فقط معامله امن</span>
+        <label className="flex items-center justify-between cursor-pointer group p-2.5 rounded-xl hover:bg-divar-surfaceHover transition-all duration-200">
+          <div className="flex items-center gap-2.5">
+            <div className="w-7 h-7 rounded-lg bg-brand-500/10 flex items-center justify-center">
+              <i className="fa-solid fa-shield-halved text-brand-500 text-xs" />
+            </div>
+            <span className="text-sm text-divar-text font-medium">فقط معامله امن</span>
           </div>
           <div className="relative">
             <input type="checkbox" className="sr-only peer" defaultChecked />
-            <div className="w-9 h-5 bg-divar-bg border border-divar-border rounded-full peer peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:right-[2px] after:bg-divar-muted after:border-gray-300 after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-brand-600 peer-checked:after:bg-white" />
+            <div className="w-10 h-[22px] bg-divar-bg border border-divar-border rounded-full peer peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:right-[2px] after:bg-divar-muted after:border-divar-border after:rounded-full after:h-[18px] after:w-[18px] after:transition-all duration-200 peer-checked:bg-brand-600 peer-checked:after:bg-white peer-checked:border-brand-600" />
           </div>
         </label>
       </div>
@@ -159,59 +172,148 @@ export default function ListingsPage() {
   return (
     <>
     <div className="max-w-[1440px] mx-auto w-full px-4 py-4 md:py-6 flex flex-col md:flex-row gap-6 animate-fadeIn">
-      <aside className="hidden md:block w-72 flex-shrink-0 bg-divar-surface border border-divar-border rounded-xl p-5 h-fit sticky top-24 shadow-lg">
-        {filterContent}
+      {/* Desktop sidebar */}
+      <aside className="hidden md:block w-72 flex-shrink-0">
+        <div className="bg-divar-surface border border-divar-border rounded-2xl p-5 h-fit sticky top-24 shadow-sm hover:shadow-lg transition-all duration-200">
+          {filterContent}
+        </div>
       </aside>
 
+      {/* Main content */}
       <section className="flex-1 min-w-0">
-        <div className="mb-4 md:mb-6 relative">
-          <input type="text" value={search} onChange={e => setSearch(e.target.value)} placeholder="جستجو بر اساس نام بانک، نوع وام، شناسه آگهی یا شهر..." className="w-full bg-divar-surface border border-divar-border text-white rounded-xl py-3 md:py-4 px-4 md:px-5 pl-12 focus:outline-none focus:border-divar-primary transition shadow-md text-sm md:text-base" />
-          <i className="fa-solid fa-magnifying-glass absolute left-4 md:left-5 top-1/2 transform -translate-y-1/2 text-divar-muted text-base md:text-lg" />
+        {/* Search bar */}
+        <div className="mb-5 relative group">
+          <input
+            type="text"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            placeholder="جستجو بر اساس نام بانک، نوع وام، شناسه آگهی یا شهر..."
+            className="w-full bg-divar-surface border border-divar-border text-divar-text rounded-2xl py-3.5 md:py-4 px-5 pl-12 focus:outline-none focus:ring-2 focus:ring-brand-500/30 focus:border-brand-500 transition-all duration-200 shadow-sm group-hover:shadow-md text-sm md:text-base placeholder:text-divar-muted"
+          />
+          <div className="absolute left-4 md:left-5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-xl bg-brand-500/10 flex items-center justify-center">
+            <i className="fa-solid fa-magnifying-glass text-brand-500 text-sm" />
+          </div>
         </div>
 
-        <div className="flex md:hidden items-center gap-2 mb-4">
-          <button onClick={() => setFiltersOpen(true)} className="flex items-center gap-2 bg-divar-surface border border-divar-border text-white px-4 py-2.5 rounded-lg text-sm font-medium transition hover:bg-divar-surfaceHover">
-            <i className="fa-solid fa-sliders" />
-            فیلترها
-            {activeFilterCount > 0 && <span className="bg-divar-primary text-white w-5 h-5 rounded-full text-[10px] flex items-center justify-center font-bold">{activeFilterCount}</span>}
+        {/* Horizontal loan type pill chips (desktop) */}
+        <div className="hidden md:flex items-center gap-2 mb-5 overflow-x-auto pb-1 scrollbar-hide">
+          <button
+            onClick={() => setSelectedLoanType('')}
+            className={`cursor-pointer flex-shrink-0 px-4 py-2 rounded-xl text-xs font-medium transition-all duration-200 border ${
+              selectedLoanType === ''
+                ? 'bg-brand-600 text-white border-brand-600 shadow-sm'
+                : 'bg-divar-surface text-divar-muted border-divar-border hover:text-divar-text hover:border-brand-500/30 hover:bg-divar-surfaceHover'
+            }`}
+          >
+            همه انواع
           </button>
-          <select value={sort} onChange={e => setSort(e.target.value as SortOption)} className="bg-divar-surface border border-divar-border text-white text-xs rounded-lg px-3 py-2.5 outline-none flex-1">
+          {loanTypes.map(lt => (
+            <button
+              key={lt.value}
+              onClick={() => setSelectedLoanType(selectedLoanType === lt.value ? '' : lt.value)}
+              className={`cursor-pointer flex-shrink-0 px-4 py-2 rounded-xl text-xs font-medium transition-all duration-200 border ${
+                selectedLoanType === lt.value
+                  ? 'bg-brand-600 text-white border-brand-600 shadow-sm'
+                  : 'bg-divar-surface text-divar-muted border-divar-border hover:text-divar-text hover:border-brand-500/30 hover:bg-divar-surfaceHover'
+              }`}
+            >
+              {lt.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Mobile filter row */}
+        <div className="flex md:hidden items-center gap-2 mb-4">
+          <button onClick={() => setFiltersOpen(true)} className="cursor-pointer flex items-center gap-2 bg-divar-surface border border-divar-border text-divar-text px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 hover:bg-divar-surfaceHover hover:shadow-sm">
+            <i className="fa-solid fa-sliders text-brand-500" />
+            فیلترها
+            {activeFilterCount > 0 && (
+              <span className="bg-brand-600 text-white w-5 h-5 rounded-full text-[10px] flex items-center justify-center font-bold">
+                {activeFilterCount}
+              </span>
+            )}
+          </button>
+          <select value={sort} onChange={e => setSort(e.target.value as SortOption)} className="cursor-pointer bg-divar-surface border border-divar-border text-divar-text text-xs rounded-xl px-3 py-2.5 outline-none flex-1 transition-all duration-200 focus:ring-2 focus:ring-brand-500/30">
             <option value="newest">جدیدترین</option>
             <option value="cheapest">ارزان‌ترین</option>
             <option value="highest">بالاترین مبلغ</option>
           </select>
         </div>
 
+        {/* Mobile horizontal loan type pills */}
+        <div className="flex md:hidden items-center gap-2 mb-4 overflow-x-auto pb-1 scrollbar-hide">
+          <button
+            onClick={() => setSelectedLoanType('')}
+            className={`cursor-pointer flex-shrink-0 px-3.5 py-1.5 rounded-xl text-[11px] font-medium transition-all duration-200 border ${
+              selectedLoanType === ''
+                ? 'bg-brand-600 text-white border-brand-600'
+                : 'bg-divar-surface text-divar-muted border-divar-border'
+            }`}
+          >
+            همه
+          </button>
+          {loanTypes.map(lt => (
+            <button
+              key={lt.value}
+              onClick={() => setSelectedLoanType(selectedLoanType === lt.value ? '' : lt.value)}
+              className={`cursor-pointer flex-shrink-0 px-3.5 py-1.5 rounded-xl text-[11px] font-medium transition-all duration-200 border ${
+                selectedLoanType === lt.value
+                  ? 'bg-brand-600 text-white border-brand-600'
+                  : 'bg-divar-surface text-divar-muted border-divar-border'
+              }`}
+            >
+              {lt.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Sort bar + result count (desktop) */}
         <div className="hidden md:flex items-center justify-between mb-4 gap-4">
-          <h1 className="text-sm text-divar-muted">{filtered.length > 0 ? `نمایش ${filtered.length} آگهی` : 'آگهی‌ای یافت نشد'}</h1>
-          <select value={sort} onChange={e => setSort(e.target.value as SortOption)} className="bg-divar-surface border border-divar-border text-white text-xs rounded-md px-3 py-2 outline-none">
+          <div className="flex items-center gap-2">
+            <span className="bg-brand-500/10 text-brand-500 text-xs font-bold px-3 py-1 rounded-lg">
+              {filtered.length}
+            </span>
+            <h1 className="text-sm text-divar-muted">
+              {filtered.length > 0 ? 'آگهی یافت شد' : 'آگهی‌ای یافت نشد'}
+            </h1>
+          </div>
+          <select value={sort} onChange={e => setSort(e.target.value as SortOption)} className="cursor-pointer bg-divar-surface border border-divar-border text-divar-text text-xs rounded-xl px-4 py-2 outline-none transition-all duration-200 hover:shadow-sm focus:ring-2 focus:ring-brand-500/30">
             <option value="newest">جدیدترین</option>
             <option value="cheapest">ارزان‌ترین پیشنهاد فروش</option>
             <option value="highest">بالاترین مبلغ وام</option>
           </select>
         </div>
 
+        {/* Listings grid */}
         {filtered.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
             {filtered.map(ad => <ListingCard key={ad.id} ad={ad} />)}
           </div>
         ) : (
-          <div className="bg-divar-surface border border-divar-border rounded-xl p-12 text-center">
-            <i className="fa-solid fa-magnifying-glass text-4xl text-divar-muted mb-4" />
-            <p className="text-divar-muted text-sm">آگهی‌ای با این مشخصات یافت نشد.</p>
-            <button onClick={clearFilters} className="text-brand-400 text-sm mt-3 hover:underline">حذف فیلترها</button>
+          <div className="bg-divar-surface border border-divar-border rounded-2xl p-16 text-center">
+            <div className="w-16 h-16 rounded-2xl bg-divar-bg mx-auto mb-4 flex items-center justify-center">
+              <i className="fa-solid fa-magnifying-glass text-2xl text-divar-muted" />
+            </div>
+            <p className="text-divar-text text-sm font-medium mb-1">آگهی‌ای یافت نشد</p>
+            <p className="text-divar-muted text-xs mb-4">فیلترها را تغییر دهید یا عبارت جستجو را اصلاح کنید</p>
+            <button onClick={clearFilters} className="cursor-pointer bg-brand-600 hover:bg-brand-500 text-white text-sm px-5 py-2 rounded-xl transition-all duration-200 shadow-sm hover:shadow-md">
+              حذف فیلترها
+            </button>
           </div>
         )}
       </section>
     </div>
 
+    {/* Mobile filter bottom sheet */}
     {filtersOpen && (
       <>
-        <div className="fixed inset-0 bg-black/60 z-50 md:hidden" onClick={() => setFiltersOpen(false)} />
-        <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-divar-surface border-t border-divar-border rounded-t-2xl p-5 pb-8 max-h-[80vh] overflow-y-auto animate-slideUp">
-          <div className="w-10 h-1 bg-divar-border rounded-full mx-auto mb-4 cursor-pointer" onClick={() => setFiltersOpen(false)} />
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 md:hidden transition-all duration-200" onClick={() => setFiltersOpen(false)} />
+        <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-divar-surface border-t border-divar-border rounded-t-3xl p-5 pb-8 max-h-[85vh] overflow-y-auto animate-slideUp shadow-2xl">
+          {/* Drag handle */}
+          <div className="w-12 h-1.5 bg-divar-border rounded-full mx-auto mb-5 cursor-pointer" onClick={() => setFiltersOpen(false)} />
           {filterContent}
-          <button onClick={() => setFiltersOpen(false)} className="w-full bg-brand-600 hover:bg-brand-500 text-white py-3 rounded-lg mt-6 text-sm font-bold transition">
+          <button onClick={() => setFiltersOpen(false)} className="cursor-pointer w-full bg-brand-600 hover:bg-brand-500 text-white py-3.5 rounded-xl mt-6 text-sm font-bold transition-all duration-200 shadow-lg hover:shadow-xl flex items-center justify-center gap-2">
+            <i className="fa-solid fa-check text-xs" />
             مشاهده {filtered.length} نتیجه
           </button>
         </div>

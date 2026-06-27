@@ -16,9 +16,9 @@ export default function TransactionTimeline({ transaction }: { transaction: Tran
               {isLast ? <i className="fa-solid fa-circle text-[5px]" /> : <i className="fa-solid fa-check" />}
             </div>
             <div className="mr-8">
-              <div className="text-xs font-bold text-white">{transactionStatusLabels[entry.status]}</div>
+              <div className="text-xs font-bold text-divar-text">{transactionStatusLabels[entry.status]}</div>
               <div className="text-[10px] text-divar-muted mt-0.5">{entry.date}</div>
-              <div className="text-[11px] text-gray-300 mt-1">{entry.note}</div>
+              <div className="text-[11px] text-divar-text mt-1">{entry.note}</div>
             </div>
           </div>
         );

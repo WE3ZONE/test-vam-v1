@@ -193,9 +193,9 @@ export const kycStatusLabels: Record<KycStatus, string> = {
 };
 
 export const colorMap: Record<string, { gradient: string; border: string }> = {
-  blue: { gradient: 'from-blue-900 to-blue-700', border: 'border-blue-800' },
-  teal: { gradient: 'from-teal-900 to-teal-700', border: 'border-teal-800' },
-  green: { gradient: 'from-green-900 to-green-700', border: 'border-green-800' },
-  red: { gradient: 'from-red-900 to-red-700', border: 'border-red-800' },
-  indigo: { gradient: 'from-indigo-900 to-indigo-700', border: 'border-indigo-800' },
+  blue: { gradient: 'from-blue-500 to-blue-700', border: 'border-blue-400/50' },
+  teal: { gradient: 'from-teal-500 to-teal-700', border: 'border-teal-400/50' },
+  green: { gradient: 'from-green-500 to-green-700', border: 'border-green-400/50' },
+  red: { gradient: 'from-red-500 to-red-700', border: 'border-red-400/50' },
+  indigo: { gradient: 'from-indigo-500 to-indigo-700', border: 'border-indigo-400/50' },
 };

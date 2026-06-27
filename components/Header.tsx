@@ -5,9 +5,11 @@ import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from './AuthContext';
 import { useApp } from './AppContext';
+import { useTheme } from './ThemeContext';
 
 export default function Header() {
   const auth = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const app = useApp();
   const router = useRouter();
   const pathname = usePathname();
@@ -41,12 +43,12 @@ export default function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 bg-divar-surface border-b border-divar-border shadow-md">
+      <header className="sticky top-0 z-50 bg-divar-surface/95 backdrop-blur-md border-b border-divar-border shadow-sm">
         <div className="max-w-[1440px] mx-auto px-4 h-14 md:h-16 flex items-center justify-between gap-3">
           <div className="flex items-center gap-3 lg:gap-6 flex-1 min-w-0">
             <button
               onClick={(e) => { e.stopPropagation(); setMenuOpen(v => !v); }}
-              className="lg:hidden text-divar-muted hover:text-white transition text-lg w-8 h-8 flex items-center justify-center relative z-[60]"
+              className="lg:hidden text-divar-muted hover:text-divar-text transition text-lg w-8 h-8 flex items-center justify-center relative z-[60]"
             >
               <i className={`fa-solid ${menuOpen ? 'fa-xmark' : 'fa-bars'}`} />
             </button>
@@ -59,7 +61,7 @@ export default function Header() {
 
             <button
               onClick={auth.openCityPicker}
-              className="hidden md:flex items-center text-divar-text text-sm hover:text-white cursor-pointer transition ml-2 bg-divar-bg px-3 py-1.5 rounded-full border border-divar-border gap-1"
+              className="hidden md:flex items-center text-divar-text text-sm hover:text-divar-text cursor-pointer transition ml-2 bg-divar-bg px-3 py-1.5 rounded-full border border-divar-border gap-1"
             >
               <i className="fa-solid fa-location-dot ml-1 text-divar-muted" />
               <span className="max-w-[120px] truncate">{cityLabel}</span>
@@ -73,7 +75,7 @@ export default function Header() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`hover:text-white transition ${pathname === link.href ? 'text-white' : ''}`}
+                  className={`hover:text-divar-text transition ${pathname === link.href ? 'text-divar-text' : ''}`}
                 >
                   {link.label}
                 </Link>
@@ -82,15 +84,23 @@ export default function Header() {
           </div>
 
           <div className="flex items-center gap-2 md:gap-5 text-sm flex-shrink-0">
+            <button
+              onClick={toggleTheme}
+              className="w-8 h-8 rounded-full bg-divar-bg flex items-center justify-center border border-divar-border text-divar-muted hover:text-divar-text transition"
+              title={theme === 'dark' ? 'حالت روشن' : 'حالت تاریک'}
+            >
+              <i className={`fa-solid ${theme === 'dark' ? 'fa-sun text-yellow-400' : 'fa-moon'}`} />
+            </button>
+
             {!auth.isLoggedIn ? (
-              <button onClick={auth.openLoginModal} className="flex items-center text-divar-muted hover:text-white transition group">
-                <div className="w-8 h-8 rounded-full bg-divar-bg flex items-center justify-center border border-divar-border group-hover:border-gray-500 transition md:ml-2">
+              <button onClick={auth.openLoginModal} className="flex items-center text-divar-muted hover:text-divar-text transition group">
+                <div className="w-8 h-8 rounded-full bg-divar-bg flex items-center justify-center border border-divar-border group-hover:border-divar-border transition md:ml-2">
                   <i className="fa-regular fa-user" />
                 </div>
                 <span className="hidden sm:block">ورود / ثبت‌نام</span>
               </button>
             ) : (
-              <Link href="/dashboard" className="flex items-center text-divar-muted hover:text-white transition group">
+              <Link href="/dashboard" className="flex items-center text-divar-muted hover:text-divar-text transition group">
                 <div className="w-8 h-8 rounded-full bg-brand-900 text-brand-500 flex items-center justify-center border border-brand-600 md:ml-2">
                   <i className="fa-solid fa-user-check" />
                 </div>
@@ -100,7 +110,7 @@ export default function Header() {
 
             <button
               onClick={handleNewAd}
-              className="bg-divar-primary hover:bg-divar-primaryHover text-white px-2.5 md:px-4 py-2 rounded-md font-medium transition duration-200 shadow-lg shadow-red-900/20 whitespace-nowrap flex items-center gap-1.5 text-xs md:text-sm"
+              className="bg-divar-primary hover:bg-divar-primaryHover text-divar-text px-2.5 md:px-4 py-2 rounded-md font-medium transition duration-200 shadow-lg shadow-red-900/20 whitespace-nowrap flex items-center gap-1.5 text-xs md:text-sm"
             >
               <i className="fa-solid fa-plus text-xs" />
               <span className="hidden sm:inline">ثبت آگهی</span>
@@ -140,8 +150,8 @@ export default function Header() {
                   onClick={() => setMenuOpen(false)}
                   className={`block px-5 py-3.5 text-sm transition border-r-4 ${
                     pathname === link.href
-                      ? 'text-white bg-divar-bg border-brand-500'
-                      : 'text-divar-muted hover:text-white hover:bg-divar-bg border-transparent'
+                      ? 'text-divar-text bg-divar-bg border-brand-500'
+                      : 'text-divar-muted hover:text-divar-text hover:bg-divar-bg border-transparent'
                   }`}
                 >
                   {link.label}
@@ -153,7 +163,7 @@ export default function Header() {
               {!auth.isLoggedIn ? (
                 <button
                   onClick={() => { setMenuOpen(false); auth.openLoginModal(); }}
-                  className="w-full bg-divar-bg border border-divar-border text-white py-3 rounded-lg text-sm font-medium transition hover:bg-divar-surfaceHover flex items-center justify-center gap-2"
+                  className="w-full bg-divar-bg border border-divar-border text-divar-text py-3 rounded-lg text-sm font-medium transition hover:bg-divar-surfaceHover flex items-center justify-center gap-2"
                 >
                   <i className="fa-regular fa-user" />
                   ورود / ثبت‌نام
@@ -162,7 +172,7 @@ export default function Header() {
                 <Link
                   href="/dashboard"
                   onClick={() => setMenuOpen(false)}
-                  className="w-full bg-divar-bg border border-divar-border text-white py-3 rounded-lg text-sm font-medium transition hover:bg-divar-surfaceHover flex items-center justify-center gap-2"
+                  className="w-full bg-divar-bg border border-divar-border text-divar-text py-3 rounded-lg text-sm font-medium transition hover:bg-divar-surfaceHover flex items-center justify-center gap-2"
                 >
                   <i className="fa-solid fa-user-check" />
                   داشبورد من

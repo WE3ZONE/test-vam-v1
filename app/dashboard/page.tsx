@@ -9,8 +9,9 @@ import StatusBadge from '@/components/StatusBadge';
 import StepProgress from '@/components/StepProgress';
 import TransactionTimeline from '@/components/TransactionTimeline';
 import { Transaction, transactionStatusLabels } from '@/data/types';
+import ListingCard from '@/components/ListingCard';
 
-type Tab = 'requests' | 'ads' | 'tickets' | 'kyc';
+type Tab = 'requests' | 'ads' | 'favorites' | 'tickets' | 'kyc';
 
 export default function DashboardPage() {
   const auth = useAuth();
@@ -37,6 +38,7 @@ export default function DashboardPage() {
   const tabs: { id: Tab; label: string; shortLabel: string; icon: string }[] = [
     { id: 'requests', label: 'درخواست‌های خرید', shortLabel: 'درخواست‌ها', icon: 'fa-file-invoice-dollar' },
     { id: 'ads', label: 'آگهی‌های من', shortLabel: 'آگهی‌ها', icon: 'fa-bullhorn' },
+    { id: 'favorites', label: 'علاقه‌مندی‌ها', shortLabel: 'علاقه‌مندی', icon: 'fa-heart' },
     { id: 'tickets', label: 'تیکت‌های پشتیبانی', shortLabel: 'تیکت‌ها', icon: 'fa-headset' },
     { id: 'kyc', label: 'اطلاعات هویتی', shortLabel: 'هویتی', icon: 'fa-id-card' },
   ];
@@ -73,7 +75,7 @@ export default function DashboardPage() {
 
   return (
     <div className="max-w-[1440px] mx-auto w-full px-4 py-4 md:py-8 animate-fadeIn">
-      <h1 className="text-xl md:text-2xl font-bold text-white mb-4 md:mb-6">داشبورد کاربری من</h1>
+      <h1 className="text-xl md:text-2xl font-bold text-divar-text mb-4 md:mb-6">داشبورد کاربری من</h1>
 
       {/* Mobile tabs */}
       <div className="md:hidden mb-4">
@@ -82,7 +84,7 @@ export default function DashboardPage() {
             <i className="fa-solid fa-user" />
           </div>
           <div className="flex-1 min-w-0">
-            <div className="text-white font-medium text-sm truncate">{app.currentUser?.name || auth.userPhone}</div>
+            <div className="text-divar-text font-medium text-sm truncate">{app.currentUser?.name || auth.userPhone}</div>
             <div className="text-[10px] text-green-400 flex items-center gap-1">
               <i className="fa-solid fa-shield-check" /> {app.currentUser?.kycStatus === 'verified' ? 'احراز هویت شده' : 'در انتظار احراز هویت'}
             </div>
@@ -95,7 +97,7 @@ export default function DashboardPage() {
           <div className="flex overflow-x-auto scrollbar-hide">
             {tabs.map(tab => (
               <button key={tab.id} onClick={() => { setActiveTab(tab.id); setSelectedTrx(null); setOpenTicket(null); }}
-                className={`flex-1 min-w-[25%] flex flex-col items-center gap-1 py-3 px-2 text-center transition relative ${activeTab === tab.id ? 'text-white' : 'text-divar-muted'}`}>
+                className={`flex-1 min-w-[25%] flex flex-col items-center gap-1 py-3 px-2 text-center transition relative ${activeTab === tab.id ? 'text-divar-text' : 'text-divar-muted'}`}>
                 <i className={`fa-solid ${tab.icon} text-base ${activeTab === tab.id ? 'text-brand-400' : ''}`} />
                 <span className="text-[10px] font-medium whitespace-nowrap">{tab.shortLabel}</span>
                 {activeTab === tab.id && <div className="absolute bottom-0 left-2 right-2 h-[3px] bg-brand-500 rounded-t-full" />}
@@ -113,7 +115,7 @@ export default function DashboardPage() {
               <div className="w-16 h-16 mx-auto bg-divar-bg border-2 border-brand-500 rounded-full flex items-center justify-center text-brand-500 text-2xl mb-3 shadow-inner">
                 <i className="fa-solid fa-user" />
               </div>
-              <div className="text-white font-medium">{app.currentUser?.name || auth.userPhone}</div>
+              <div className="text-divar-text font-medium">{app.currentUser?.name || auth.userPhone}</div>
               <div className="text-xs text-green-400 mt-1 flex items-center justify-center gap-1 bg-green-900/20 py-1 rounded mx-4">
                 <i className="fa-solid fa-shield-check" /> {app.currentUser?.kycStatus === 'verified' ? 'احراز هویت شده' : 'در انتظار'}
               </div>
@@ -121,7 +123,7 @@ export default function DashboardPage() {
             <nav className="flex flex-col text-sm">
               {tabs.map(tab => (
                 <button key={tab.id} onClick={() => { setActiveTab(tab.id); setSelectedTrx(null); setOpenTicket(null); }}
-                  className={`text-right p-4 transition border-l-4 ${activeTab === tab.id ? 'text-white bg-divar-bg border-brand-500' : 'text-divar-muted hover:text-white hover:bg-divar-bg border-transparent'}`}>
+                  className={`text-right p-4 transition border-l-4 ${activeTab === tab.id ? 'text-divar-text bg-divar-bg border-brand-500' : 'text-divar-muted hover:text-divar-text hover:bg-divar-bg border-transparent'}`}>
                   <i className={`fa-solid ${tab.icon} w-5 ml-2 text-center`} />{tab.label}
                 </button>
               ))}
@@ -138,7 +140,7 @@ export default function DashboardPage() {
           {/* REQUESTS TAB */}
           {activeTab === 'requests' && !selectedTrx && (
             <div>
-              <h2 className="text-base md:text-lg font-bold text-white mb-4">درخواست‌های خرید و فروش ({myTransactions.length})</h2>
+              <h2 className="text-base md:text-lg font-bold text-divar-text mb-4">درخواست‌های خرید و فروش ({myTransactions.length})</h2>
               {myTransactions.length === 0 ? (
                 <div className="text-center py-12 text-divar-muted">
                   <i className="fa-solid fa-inbox text-3xl mb-3" />
@@ -154,10 +156,10 @@ export default function DashboardPage() {
                       <button key={trx.id} onClick={() => setSelectedTrx(trx)} className="w-full bg-divar-bg border border-divar-border rounded-lg p-4 text-right hover:border-brand-500/50 transition">
                         <div className="flex justify-between items-start mb-2 gap-2">
                           <div className="flex-1 min-w-0">
-                            <div className="text-white text-sm font-bold truncate">{listing?.bank} — {trx.amount} تومان</div>
+                            <div className="text-divar-text text-sm font-bold truncate">{listing?.bank} — {trx.amount} تومان</div>
                             <div className="text-[11px] text-divar-muted mt-0.5 flex items-center gap-2">
                               <span className="font-mono">{trx.id}</span>
-                              <span className={`px-1.5 py-0.5 rounded text-[9px] font-bold ${trx.mode === 'escrow' ? 'bg-brand-900/30 text-brand-400' : 'bg-gray-800 text-gray-400'}`}>
+                              <span className={`px-1.5 py-0.5 rounded text-[9px] font-bold ${trx.mode === 'escrow' ? 'bg-brand-50 text-brand-700 dark:bg-brand-900/30 dark:text-brand-400' : 'bg-divar-bg text-divar-muted'}`}>
                                 {trx.mode === 'escrow' ? 'معامله امن' : 'مستقیم'}
                               </span>
                               <span>{isBuyer ? 'خریدار' : 'فروشنده'}</span>
@@ -179,16 +181,16 @@ export default function DashboardPage() {
           {/* TRANSACTION DETAIL */}
           {activeTab === 'requests' && selectedTrx && (
             <div>
-              <button onClick={() => setSelectedTrx(null)} className="text-divar-muted hover:text-white transition flex items-center gap-2 mb-4 text-sm">
+              <button onClick={() => setSelectedTrx(null)} className="text-divar-muted hover:text-divar-text transition flex items-center gap-2 mb-4 text-sm">
                 <i className="fa-solid fa-arrow-right" /> بازگشت
               </button>
               <div className="flex justify-between items-start mb-4">
                 <div>
-                  <h2 className="text-lg font-bold text-white">{selectedTrx.id}</h2>
+                  <h2 className="text-lg font-bold text-divar-text">{selectedTrx.id}</h2>
                   <div className="text-xs text-divar-muted mt-1 flex items-center gap-3">
                     <span>مبلغ: {selectedTrx.amount} تومان</span>
                     {selectedTrx.platformFee && <span>کارمزد: {selectedTrx.platformFee}</span>}
-                    <span className={`px-1.5 py-0.5 rounded text-[9px] font-bold ${selectedTrx.mode === 'escrow' ? 'bg-brand-900/30 text-brand-400' : 'bg-gray-800 text-gray-400'}`}>
+                    <span className={`px-1.5 py-0.5 rounded text-[9px] font-bold ${selectedTrx.mode === 'escrow' ? 'bg-brand-50 text-brand-700 dark:bg-brand-900/30 dark:text-brand-400' : 'bg-divar-bg text-divar-muted'}`}>
                       {selectedTrx.mode === 'escrow' ? 'معامله امن' : 'مستقیم'}
                     </span>
                   </div>
@@ -203,14 +205,14 @@ export default function DashboardPage() {
               )}
 
               <div className="bg-divar-bg border border-divar-border rounded-lg p-4 mb-4">
-                <h3 className="text-sm font-bold text-white mb-3">تاریخچه تراکنش</h3>
+                <h3 className="text-sm font-bold text-divar-text mb-3">تاریخچه تراکنش</h3>
                 <TransactionTimeline transaction={selectedTrx} />
               </div>
 
               {selectedTrx.transferDeadline && (
                 <div className="bg-yellow-900/10 border border-yellow-800/30 rounded-lg p-3 mb-4 flex items-center gap-2 text-xs">
                   <i className="fa-solid fa-clock text-yellow-500" />
-                  <span className="text-gray-300">مهلت انتقال: <span className="text-white font-bold">{selectedTrx.transferDeadline}</span></span>
+                  <span className="text-divar-text">مهلت انتقال: <span className="text-divar-text font-bold">{selectedTrx.transferDeadline}</span></span>
                 </div>
               )}
 
@@ -228,7 +230,7 @@ export default function DashboardPage() {
           {activeTab === 'ads' && (
             <div>
               <div className="flex justify-between items-center mb-4 md:mb-6 gap-3">
-                <h2 className="text-base md:text-lg font-bold text-white">آگهی‌های من ({myListings.length})</h2>
+                <h2 className="text-base md:text-lg font-bold text-divar-text">آگهی‌های من ({myListings.length})</h2>
                 <button onClick={() => router.push('/new-ad')} className="bg-brand-600 hover:bg-brand-500 text-white px-3 md:px-4 py-2 rounded-md text-xs md:text-sm transition shadow-md flex items-center gap-1.5 flex-shrink-0">
                   <i className="fa-solid fa-plus" /> آگهی جدید
                 </button>
@@ -241,16 +243,19 @@ export default function DashboardPage() {
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {myListings.map(l => (
-                    <div key={l.id} className={`bg-divar-bg border rounded-lg p-4 md:p-5 ${l.status === 'draft' ? 'border-dashed border-gray-600' : 'border-divar-border'}`}>
+                    <div key={l.id} className={`bg-divar-bg border rounded-lg p-4 md:p-5 ${l.status === 'draft' ? 'border-dashed border-divar-border' : 'border-divar-border'}`}>
                       <div className="flex justify-between items-start mb-3">
-                        <h3 className="text-white text-sm font-bold">{l.bank} {l.amount}</h3>
+                        <h3 className="text-divar-text text-sm font-bold">{l.bank} {l.amount}</h3>
                         <StatusBadge type="listing" status={l.status} />
                       </div>
                       <p className="text-xs text-divar-muted mb-2">قیمت: {l.price} تومان | {l.location}</p>
                       {l.status === 'published' && <p className="text-xs text-divar-muted mb-3">بازدید: {l.views} نفر</p>}
                       {l.rejectionReason && <p className="text-xs text-red-400 mb-3 bg-red-900/10 p-2 rounded"><i className="fa-solid fa-xmark ml-1" />{l.rejectionReason}</p>}
                       <div className="flex gap-4">
-                        <button onClick={() => router.push('/new-ad')} className="text-brand-400 text-xs hover:text-white transition flex items-center gap-1"><i className="fa-solid fa-pen" /> ویرایش</button>
+                        {l.status === 'published' && (
+                          <button onClick={() => router.push(`/listings/${l.id}`)} className="text-blue-400 text-xs hover:text-divar-text transition flex items-center gap-1"><i className="fa-solid fa-eye" /> پیشنمایش</button>
+                        )}
+                        <button onClick={() => router.push('/new-ad')} className="text-brand-400 text-xs hover:text-divar-text transition flex items-center gap-1"><i className="fa-solid fa-pen" /> ویرایش</button>
                         <button onClick={() => alert.showConfirm('حذف آگهی', `آیا مطمئن هستید که می‌خواهید آگهی «${l.bank} ${l.amount}» را حذف کنید؟`, () => { app.updateListingStatus(l.id, 'cancelled'); alert.showAlert('حذف شد', 'آگهی حذف شد.', 'success'); })} className="text-red-400 text-xs hover:text-red-300 transition flex items-center gap-1"><i className="fa-solid fa-trash" /> حذف</button>
                       </div>
                     </div>
@@ -260,19 +265,43 @@ export default function DashboardPage() {
             </div>
           )}
 
+          {/* FAVORITES TAB */}
+          {activeTab === 'favorites' && (
+            <div>
+              <h2 className="text-base md:text-lg font-bold text-divar-text mb-4">آگهی‌های مورد علاقه</h2>
+              {(() => {
+                const favListings = app.favorites
+                  .filter(f => f.userId === app.currentUser?.id)
+                  .map(f => app.getListingById(f.listingId))
+                  .filter(Boolean);
+                return favListings.length > 0 ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {favListings.map(l => l && <ListingCard key={l.id} ad={l} />)}
+                  </div>
+                ) : (
+                  <div className="text-center py-12 text-divar-muted">
+                    <i className="fa-regular fa-heart text-3xl mb-3" />
+                    <p className="text-sm">هنوز آگهی‌ای به علاقه‌مندی‌ها اضافه نکرده‌اید</p>
+                    <button onClick={() => router.push('/listings')} className="text-brand-500 text-sm mt-2 hover:underline">مشاهده آگهی‌ها</button>
+                  </div>
+                );
+              })()}
+            </div>
+          )}
+
           {/* TICKETS TAB */}
           {activeTab === 'tickets' && !openTicketData && (
             <div>
               <div className="flex justify-between items-center mb-4 gap-3">
-                <h2 className="text-base md:text-lg font-bold text-white">تیکت‌های پشتیبانی</h2>
+                <h2 className="text-base md:text-lg font-bold text-divar-text">تیکت‌های پشتیبانی</h2>
                 <button onClick={() => router.push('/support')} className="bg-brand-600 hover:bg-brand-500 text-white px-3 py-2 rounded-md text-xs transition flex items-center gap-1.5"><i className="fa-solid fa-plus" /> تیکت جدید</button>
               </div>
               <div className="space-y-3">
                 {myTickets.map(ticket => (
                   <button key={ticket.id} onClick={() => setOpenTicket(ticket.id)} className="w-full bg-divar-bg border border-divar-border rounded-lg p-4 text-right hover:border-brand-500/50 transition group">
                     <div className="flex justify-between items-start mb-2">
-                      <h3 className="text-white text-sm font-bold group-hover:text-brand-400 transition">{ticket.subject}</h3>
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold border flex-shrink-0 mr-2 ${ticket.status === 'open' ? 'bg-green-900/30 text-green-500 border-green-800' : ticket.status === 'in_progress' ? 'bg-yellow-900/30 text-yellow-500 border-yellow-700' : 'bg-gray-800 text-gray-400 border-gray-700'}`}>
+                      <h3 className="text-divar-text text-sm font-bold group-hover:text-brand-400 transition">{ticket.subject}</h3>
+                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold border flex-shrink-0 mr-2 ${ticket.status === 'open' ? 'bg-green-50 text-green-700 border-green-200 dark:bg-green-900/30 dark:text-green-400 dark:border-green-800' : ticket.status === 'in_progress' ? 'bg-yellow-50 text-yellow-700 border-yellow-200 dark:bg-yellow-900/30 dark:text-yellow-400 dark:border-yellow-700' : 'bg-divar-bg text-divar-muted border-divar-border'}`}>
                         {ticket.status === 'open' ? 'باز' : ticket.status === 'in_progress' ? 'در حال بررسی' : 'بسته شده'}
                       </span>
                     </div>
@@ -292,12 +321,12 @@ export default function DashboardPage() {
           {activeTab === 'tickets' && openTicketData && (
             <div className="flex flex-col h-full min-h-[400px]">
               <div className="flex items-center gap-3 mb-4 pb-4 border-b border-divar-border">
-                <button onClick={() => setOpenTicket(null)} className="text-divar-muted hover:text-white transition"><i className="fa-solid fa-arrow-right text-lg" /></button>
+                <button onClick={() => setOpenTicket(null)} className="text-divar-muted hover:text-divar-text transition"><i className="fa-solid fa-arrow-right text-lg" /></button>
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-white text-sm font-bold truncate">{openTicketData.subject}</h3>
+                  <h3 className="text-divar-text text-sm font-bold truncate">{openTicketData.subject}</h3>
                   <div className="text-[11px] text-divar-muted flex items-center gap-2 mt-0.5">
                     <span className="font-mono">{openTicketData.id}</span>
-                    <span className={`px-1.5 py-0.5 rounded text-[9px] font-bold border ${openTicketData.status === 'open' ? 'bg-green-900/30 text-green-500 border-green-800' : 'bg-gray-800 text-gray-400 border-gray-700'}`}>
+                    <span className={`px-1.5 py-0.5 rounded text-[9px] font-bold border ${openTicketData.status === 'open' ? 'bg-green-50 text-green-700 border-green-200 dark:bg-green-900/30 dark:text-green-400 dark:border-green-800' : 'bg-divar-bg text-divar-muted border-divar-border'}`}>
                       {openTicketData.status === 'open' ? 'باز' : openTicketData.status === 'in_progress' ? 'بررسی' : 'بسته'}
                     </span>
                   </div>
@@ -306,7 +335,7 @@ export default function DashboardPage() {
               <div className="flex-1 overflow-y-auto space-y-3 mb-4">
                 {openTicketData.messages.map((msg, i) => (
                   <div key={i} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-                    <div className={`max-w-[85%] md:max-w-[70%] rounded-2xl px-4 py-3 ${msg.sender === 'user' ? 'bg-brand-600 text-white rounded-bl-sm' : msg.sender === 'system' ? 'bg-yellow-900/20 border border-yellow-800/30 text-yellow-300 rounded-br-sm' : 'bg-divar-bg border border-divar-border text-gray-200 rounded-br-sm'}`}>
+                    <div className={`max-w-[85%] md:max-w-[70%] rounded-2xl px-4 py-3 ${msg.sender === 'user' ? 'bg-brand-600 text-white rounded-bl-sm' : msg.sender === 'system' ? 'bg-yellow-900/20 border border-yellow-800/30 text-yellow-300 rounded-br-sm' : 'bg-divar-bg border border-divar-border text-divar-text rounded-br-sm'}`}>
                       <div className="flex items-center gap-2 mb-1">
                         <span className="text-[10px] font-bold opacity-70">{msg.sender === 'user' ? 'شما' : msg.sender === 'system' ? 'سیستم' : 'پشتیبانی'}</span>
                         <span className="text-[10px] opacity-50">{msg.time}</span>
@@ -318,7 +347,7 @@ export default function DashboardPage() {
               </div>
               {openTicketData.status !== 'closed' && (
                 <div className="flex gap-2 pt-3 border-t border-divar-border">
-                  <input type="text" placeholder="پیام خود را بنویسید..." className="flex-1 bg-divar-bg border border-divar-border text-white rounded-lg py-2.5 px-4 text-sm focus:outline-none focus:border-brand-500" />
+                  <input type="text" placeholder="پیام خود را بنویسید..." className="flex-1 bg-divar-bg border border-divar-border text-divar-text rounded-lg py-2.5 px-4 text-sm focus:outline-none focus:border-brand-500" />
                   <button onClick={() => alert.showAlert('ارسال شد', 'پیام شما ارسال شد.', 'success')} className="bg-brand-600 hover:bg-brand-500 text-white px-4 rounded-lg transition flex-shrink-0"><i className="fa-solid fa-paper-plane" /></button>
                 </div>
               )}
@@ -328,16 +357,16 @@ export default function DashboardPage() {
           {/* KYC TAB */}
           {activeTab === 'kyc' && (
             <div>
-              <h2 className="text-base md:text-lg font-bold text-white mb-2">احراز هویت و اطلاعات بانکی</h2>
+              <h2 className="text-base md:text-lg font-bold text-divar-text mb-2">احراز هویت و اطلاعات بانکی</h2>
               <p className="text-xs md:text-sm text-divar-muted mb-4 md:mb-6 bg-brand-900/10 p-3 rounded border border-brand-900/30">تطابق کامل کد ملی و شماره شبا الزامی است.</p>
               <div className="max-w-md space-y-4">
                 <div>
                   <label className="block text-xs text-divar-muted mb-1">نام و نام خانوادگی</label>
-                  <input type="text" defaultValue={app.currentUser?.name || ''} disabled className="w-full bg-divar-bg border border-divar-border text-gray-400 rounded-md py-2.5 px-3 text-sm cursor-not-allowed" />
+                  <input type="text" defaultValue={app.currentUser?.name || ''} disabled className="w-full bg-divar-bg border border-divar-border text-divar-muted rounded-md py-2.5 px-3 text-sm cursor-not-allowed" />
                 </div>
                 <div>
                   <label className="block text-xs text-divar-muted mb-1">کد ملی</label>
-                  <input type="text" defaultValue={app.currentUser?.nationalId || ''} disabled className="w-full bg-divar-bg border border-divar-border text-gray-400 rounded-md py-2.5 px-3 text-sm cursor-not-allowed text-left" dir="ltr" />
+                  <input type="text" defaultValue={app.currentUser?.nationalId || ''} disabled className="w-full bg-divar-bg border border-divar-border text-divar-muted rounded-md py-2.5 px-3 text-sm cursor-not-allowed text-left" dir="ltr" />
                 </div>
                 <div>
                   <label className="block text-xs text-divar-muted mb-1">شماره شبا (IBAN)</label>
@@ -351,7 +380,7 @@ export default function DashboardPage() {
                   <div className="space-y-2">
                     {app.currentUser?.kycDocuments.map(d => (
                       <div key={d.type} className="bg-divar-bg border border-divar-border rounded-lg p-3 flex items-center justify-between">
-                        <span className="text-sm text-white">{d.type}</span>
+                        <span className="text-sm text-divar-text">{d.type}</span>
                         <span className={`text-xs flex items-center gap-1 ${d.uploaded ? (d.verified ? 'text-green-400' : 'text-yellow-500') : 'text-red-400'}`}>
                           <i className={`fa-solid ${d.uploaded ? (d.verified ? 'fa-check-circle' : 'fa-clock') : 'fa-xmark'}`} />
                           {d.uploaded ? (d.verified ? 'تایید شده' : 'در انتظار بررسی') : 'آپلود نشده'}

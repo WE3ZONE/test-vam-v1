@@ -51,70 +51,62 @@ export default function LoginModal() {
   }
 
   return (
-    <div
-      className="fixed inset-0 bg-black/75 backdrop-blur-sm z-[100] flex items-center justify-center"
-      onClick={close}
-    >
-      <div
-        className="bg-divar-surface border border-divar-border rounded-xl w-[90%] max-w-[400px] p-6 shadow-2xl"
-        onClick={e => e.stopPropagation()}
-      >
-        <div className="flex justify-between items-center mb-6 border-b border-divar-border pb-4">
-          <h3 className="text-lg font-bold text-white">ورود / ثبت‌نام</h3>
-          <button onClick={close} className="text-divar-muted hover:text-white transition">
-            <i className="fa-solid fa-xmark text-xl" />
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4" onClick={close}>
+      <div className="bg-divar-surface border border-divar-border rounded-2xl w-full max-w-[400px] shadow-2xl overflow-hidden" onClick={e => e.stopPropagation()}>
+        {/* Header */}
+        <div className="p-5 pb-0 flex justify-between items-center">
+          <h3 className="text-lg font-bold text-divar-text">ورود / ثبت‌نام</h3>
+          <button onClick={close} className="w-8 h-8 rounded-lg bg-divar-bg flex items-center justify-center text-divar-muted hover:text-divar-text transition-colors cursor-pointer">
+            <i className="fa-solid fa-xmark" />
           </button>
         </div>
 
-        {step === 1 ? (
-          <div>
-            <p className="text-sm text-divar-muted mb-5 leading-relaxed text-center">
-              جهت استفاده از خدمات، شماره موبایل خود را وارد کنید.
-            </p>
-            <input
-              type="tel"
-              value={phone}
-              onChange={e => setPhone(e.target.value)}
-              placeholder="مثال: 09123456789"
-              className="w-full bg-divar-bg border border-divar-border text-white rounded-lg py-3 px-4 mb-5 text-center font-mono focus:outline-none focus:border-brand-500 transition text-lg tracking-widest"
-              dir="ltr"
-              maxLength={11}
-            />
-            <button
-              onClick={requestOTP}
-              className="w-full bg-divar-primary hover:bg-divar-primaryHover text-white py-3.5 rounded-lg font-bold transition shadow-lg"
-            >
-              ارسال کد تایید
-            </button>
+        <div className="p-5">
+          {/* Step indicator */}
+          <div className="flex items-center justify-center gap-2 mb-6">
+            <div className={`w-8 h-1 rounded-full transition-colors ${step >= 1 ? 'bg-brand-500' : 'bg-divar-border'}`} />
+            <div className={`w-8 h-1 rounded-full transition-colors ${step >= 2 ? 'bg-brand-500' : 'bg-divar-border'}`} />
           </div>
-        ) : (
-          <div>
-            <p className="text-sm text-divar-muted mb-5 text-center">
-              کد ۵ رقمی پیامک شده به <span className="text-brand-400 font-mono" dir="ltr">{phone}</span> را وارد کنید.
-            </p>
-            <input
-              type="text"
-              value={code}
-              onChange={e => setCode(e.target.value)}
-              placeholder="- - - - -"
-              className="w-full bg-divar-bg border border-divar-border text-white rounded-lg py-3 px-4 mb-5 text-center tracking-[1em] font-mono text-2xl focus:outline-none focus:border-brand-500 transition"
-              dir="ltr"
-              maxLength={5}
-            />
-            <button
-              onClick={verifyOTP}
-              className="w-full bg-brand-600 hover:bg-brand-500 text-white py-3.5 rounded-lg font-bold transition shadow-lg"
-            >
-              تایید و ورود
-            </button>
-            <button
-              onClick={() => { setStep(1); setCode(''); }}
-              className="w-full text-xs text-divar-muted hover:text-white mt-5 transition"
-            >
-              تغییر شماره موبایل
-            </button>
-          </div>
-        )}
+
+          {step === 1 ? (
+            <div>
+              <div className="w-16 h-16 mx-auto bg-brand-500/10 rounded-2xl flex items-center justify-center mb-4">
+                <i className="fa-solid fa-mobile-screen text-2xl text-brand-500" />
+              </div>
+              <p className="text-sm text-divar-muted mb-5 text-center leading-relaxed">
+                شماره موبایل خود را وارد کنید
+              </p>
+              <input
+                type="tel" value={phone} onChange={e => setPhone(e.target.value)}
+                placeholder="09123456789"
+                className="w-full bg-divar-bg border border-divar-border text-divar-text rounded-xl py-3.5 px-4 mb-4 text-center font-mono focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all text-lg tracking-widest" dir="ltr" maxLength={11}
+              />
+              <button onClick={requestOTP} className="w-full bg-brand-600 hover:bg-brand-700 text-white py-3.5 rounded-xl font-bold transition-all shadow-lg shadow-brand-600/20 cursor-pointer">
+                ارسال کد تایید
+              </button>
+            </div>
+          ) : (
+            <div>
+              <div className="w-16 h-16 mx-auto bg-brand-500/10 rounded-2xl flex items-center justify-center mb-4">
+                <i className="fa-solid fa-shield-check text-2xl text-brand-500" />
+              </div>
+              <p className="text-sm text-divar-muted mb-5 text-center">
+                کد ۵ رقمی ارسال شده به <span className="text-brand-500 font-mono font-bold" dir="ltr">{phone}</span>
+              </p>
+              <input
+                type="text" value={code} onChange={e => setCode(e.target.value)}
+                placeholder="- - - - -"
+                className="w-full bg-divar-bg border border-divar-border text-divar-text rounded-xl py-3.5 px-4 mb-4 text-center tracking-[1em] font-mono text-2xl focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all" dir="ltr" maxLength={5}
+              />
+              <button onClick={verifyOTP} className="w-full bg-brand-600 hover:bg-brand-700 text-white py-3.5 rounded-xl font-bold transition-all shadow-lg shadow-brand-600/20 cursor-pointer">
+                تایید و ورود
+              </button>
+              <button onClick={() => { setStep(1); setCode(''); }} className="w-full text-xs text-divar-muted hover:text-brand-500 mt-4 transition-colors cursor-pointer">
+                تغییر شماره موبایل
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
