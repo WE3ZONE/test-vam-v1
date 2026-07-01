@@ -1,4 +1,4 @@
-import { Favorite, NotificationSubscription, Dispute, AuditLogEntry } from './types';
+import { Favorite, NotificationSubscription, Dispute, AuditLogEntry, Radar } from './types';
 
 export const mockFavorites: Favorite[] = [
   { userId: 'u-demo', listingId: 1, addedAt: '۱۴۰۳/۰۳/۱۲' },
@@ -38,6 +38,39 @@ export const mockDisputes: Dispute[] = [
     reason: 'مهلت ۷ روزه انتقال امتیاز وام منقضی شده و فروشنده هنوز اقدامی انجام نداده است.',
     status: 'open',
     createdAt: '۱۴۰۳/۰۳/۰۹',
+  },
+];
+
+export const mockRadars: Radar[] = [
+  {
+    id: 'rd1',
+    userId: 'u-demo',
+    title: 'رادار وام رسالت',
+    minAmount: '۱۰۰,۰۰۰,۰۰۰',
+    maxAmount: '۳۰۰,۰۰۰,۰۰۰',
+    installments: '۶۰',
+    maxInterest: '۲٪',
+    bank: 'رسالت',
+    loanType: 'gharz_hasaneh',
+    city: 'تهران',
+    isActive: true,
+    createdAt: '۱۴۰۳/۰۳/۱۰',
+    matchCount: 3,
+  },
+  {
+    id: 'rd2',
+    userId: 'u-demo',
+    title: 'رادار وام ازدواج',
+    minAmount: '۲۰۰,۰۰۰,۰۰۰',
+    maxAmount: '۵۰۰,۰۰۰,۰۰۰',
+    installments: '۱۲۰',
+    maxInterest: '۴٪',
+    bank: '',
+    loanType: 'ezdevaj',
+    city: '',
+    isActive: true,
+    createdAt: '۱۴۰۳/۰۳/۰۸',
+    matchCount: 2,
   },
 ];
 

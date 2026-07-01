@@ -175,19 +175,53 @@ export default function HomePage() {
         </section>
       )}
 
-      {/* CTA Section */}
+      {/* Dual CTA Section: Seller + Radar */}
       <section className="max-w-5xl mx-auto px-4 py-12 md:py-16">
-        <div className="bg-gradient-to-l from-brand-600 to-brand-700 rounded-2xl p-8 md:p-12 text-center text-white relative overflow-hidden">
-          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDM0djItSDI0di0yaDEyek0zNiAyNHYySDI0di0yaDEyeiIvPjwvZz48L2c+PC9zdmc+')] opacity-50" />
-          <div className="relative">
-            <h2 className="text-2xl md:text-3xl font-black mb-4">امتیاز وام دارید؟ همین الان ثبت کنید!</h2>
-            <p className="text-sm text-white/80 mb-6 max-w-md mx-auto">آگهی خود را رایگان ثبت کنید و به هزاران خریدار دسترسی پیدا کنید.</p>
-            <button
-              onClick={handleSell}
-              className="bg-white text-brand-700 px-8 py-3 rounded-xl font-bold hover:bg-white/90 transition-colors shadow-lg cursor-pointer"
-            >
-              ثبت آگهی رایگان
-            </button>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Seller CTA */}
+          <div className="bg-gradient-to-bl from-brand-600 to-brand-700 rounded-2xl p-7 text-white relative overflow-hidden">
+            <div className="absolute -left-6 -bottom-6 w-28 h-28 bg-white/5 rounded-full" />
+            <div className="absolute -left-2 -bottom-2 w-16 h-16 bg-white/5 rounded-full" />
+            <div className="relative">
+              <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center mb-4">
+                <i className="fa-solid fa-tags text-white text-lg" />
+              </div>
+              <h2 className="text-xl font-black mb-2 leading-tight">امتیاز وام دارید؟</h2>
+              <p className="text-sm text-white/80 mb-5 leading-relaxed">آگهی رایگان ثبت کنید و به هزاران خریدار دسترسی پیدا کنید.</p>
+              <button
+                onClick={handleSell}
+                className="bg-white text-brand-700 px-6 py-2.5 rounded-xl font-bold hover:bg-white/90 transition-colors shadow-lg cursor-pointer text-sm"
+              >
+                ثبت آگهی رایگان
+              </button>
+            </div>
+          </div>
+
+          {/* Radar CTA */}
+          <div className="bg-divar-surface border border-divar-border rounded-2xl p-7 relative overflow-hidden hover:border-brand-500/30 transition-colors">
+            <div className="absolute -left-6 -bottom-6 w-28 h-28 bg-brand-500/5 rounded-full" />
+            <div className="absolute -left-2 -bottom-2 w-16 h-16 bg-brand-500/5 rounded-full" />
+            <div className="relative">
+              <div className="w-10 h-10 bg-brand-500/10 rounded-xl flex items-center justify-center mb-4">
+                <i className="fa-solid fa-satellite-dish text-brand-500 text-lg" />
+              </div>
+              <h2 className="text-xl font-black text-divar-text mb-2 leading-tight">دنبال وام می‌گردید؟</h2>
+              <p className="text-sm text-divar-muted mb-5 leading-relaxed">معیارهای وام مورد نظرتان را در رادار ثبت کنید تا به محض انتشار آگهی مشابه خبرتان کنیم.</p>
+              <button
+                onClick={() => {
+                  if (auth.isLoggedIn) {
+                    router.push('/dashboard');
+                  } else {
+                    auth.setPendingNavigation('/dashboard');
+                    auth.openLoginModal();
+                  }
+                }}
+                className="bg-brand-600 hover:bg-brand-500 text-white px-6 py-2.5 rounded-xl font-bold transition-colors shadow-lg shadow-brand-600/20 cursor-pointer text-sm flex items-center gap-2"
+              >
+                <i className="fa-solid fa-satellite-dish text-xs" />
+                فعال‌سازی رادار
+              </button>
+            </div>
           </div>
         </div>
       </section>

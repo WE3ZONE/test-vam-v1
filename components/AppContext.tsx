@@ -2,14 +2,14 @@
 
 import { createContext, useContext, useState, useCallback, ReactNode, useEffect } from 'react';
 import {
-  Listing, Transaction, User, Ticket, Favorite, NotificationSubscription, Dispute, AuditLogEntry,
+  Listing, Transaction, User, Ticket, Favorite, NotificationSubscription, Dispute, AuditLogEntry, Radar,
   ListingStatus, TransactionStatus, KycStatus,
 } from '@/data/types';
 import { mockListingsExpanded } from '@/data/mockListings';
 import { mockUsers, DEMO_USER_ID } from '@/data/mockUsers';
 import { mockTransactions } from '@/data/mockTransactions';
 import { mockTicketsData } from '@/data/mockTickets';
-import { mockFavorites, mockNotificationSubs, mockDisputes, mockAuditLog } from '@/data/mockNotifications';
+import { mockFavorites, mockNotificationSubs, mockDisputes, mockAuditLog, mockRadars } from '@/data/mockNotifications';
 import { useAuth } from './AuthContext';
 
 interface AppState {
@@ -27,9 +27,14 @@ interface AppState {
   addListing: (listing: Omit<Listing, 'id' | 'views' | 'createdAt'>) => void;
   updateTransactionStatus: (id: string, status: TransactionStatus, note?: string) => void;
   createTransaction: (listingId: number) => string | null;
-  updateUserKyc: (userId: string, status: KycStatus) => void;
-  suspendUser: (userId: string, suspend: boolean) => void;
-  blacklistUser: (userId: string, blacklist: boolean) => void;
+  updateUserKyc: (userId: string, status: KycStatus, reason?: string) => void;
+  suspendUser: (userId: string, suspend: boolean, reason?: string) => void;
+  blacklistUser: (userId: string, blacklist: boolean, reason?: string) => void;
+  addUser: (user: { name: string; phone: string; nationalId: string; city: string; role: User['role'] }) => void;
+  radars: Radar[];
+  addRadar: (radar: Omit<Radar, 'id' | 'createdAt' | 'matchCount'>) => void;
+  removeRadar: (id: string) => void;
+  toggleRadarActive: (id: string) => void;
   toggleFavorite: (listingId: number) => void;
   isFavorite: (listingId: number) => boolean;
   addNotificationSub: (sub: Omit<NotificationSubscription, 'id' | 'createdAt'>) => void;
@@ -53,6 +58,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [notifications, setNotifications] = useState<NotificationSubscription[]>(mockNotificationSubs);
   const [disputes, setDisputes] = useState<Dispute[]>(mockDisputes);
   const [auditLog] = useState<AuditLogEntry[]>(mockAuditLog);
+  const [radars, setRadars] = useState<Radar[]>(mockRadars);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   useEffect(() => {
@@ -124,19 +130,40 @@ export function AppProvider({ children }: { children: ReactNode }) {
     return id;
   }, [currentUser, listings, updateListingStatus]);
 
-  const updateUserKyc = useCallback((userId: string, status: KycStatus) => {
-    setUsers(prev => prev.map(u => u.id === userId ? { ...u, kycStatus: status } : u));
+  const updateUserKyc = useCallback((userId: string, status: KycStatus, reason?: string) => {
+    setUsers(prev => prev.map(u => u.id === userId ? { ...u, kycStatus: status, kycRejectionReason: status === 'rejected' ? reason : undefined } : u));
     if (currentUser?.id === userId) {
       setCurrentUser(prev => prev ? { ...prev, kycStatus: status } : prev);
     }
   }, [currentUser]);
 
-  const suspendUser = useCallback((userId: string, suspend: boolean) => {
-    setUsers(prev => prev.map(u => u.id === userId ? { ...u, isSuspended: suspend } : u));
+  const suspendUser = useCallback((userId: string, suspend: boolean, reason?: string) => {
+    setUsers(prev => prev.map(u => u.id === userId ? { ...u, isSuspended: suspend, suspendReason: suspend ? reason : undefined } : u));
   }, []);
 
-  const blacklistUser = useCallback((userId: string, blacklist: boolean) => {
-    setUsers(prev => prev.map(u => u.id === userId ? { ...u, isBlacklisted: blacklist } : u));
+  const blacklistUser = useCallback((userId: string, blacklist: boolean, reason?: string) => {
+    setUsers(prev => prev.map(u => u.id === userId ? { ...u, isBlacklisted: blacklist, blacklistReason: blacklist ? reason : undefined } : u));
+  }, []);
+
+  const addUser = useCallback((user: { name: string; phone: string; nationalId: string; city: string; role: User['role'] }) => {
+    setUsers(prev => [...prev, {
+      id: `u-${Date.now()}`,
+      phone: user.phone,
+      name: user.name,
+      nationalId: user.nationalId,
+      iban: '',
+      cardNumber: '',
+      role: user.role,
+      kycStatus: 'not_submitted',
+      kycDocuments: [
+        { type: 'کارت ملی', uploaded: false, verified: false },
+        { type: 'سلفی با کارت ملی', uploaded: false, verified: false },
+      ],
+      isSuspended: false,
+      isBlacklisted: false,
+      createdAt: '۱۴۰۳/۰۳/۱۶',
+      city: user.city,
+    }]);
   }, []);
 
   const toggleFavorite = useCallback((listingId: number) => {
@@ -184,6 +211,18 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }));
   }, []);
 
+  const addRadar = useCallback((radar: Omit<Radar, 'id' | 'createdAt' | 'matchCount'>) => {
+    setRadars(prev => [...prev, { ...radar, id: `rd-${Date.now()}`, createdAt: '۱۴۰۳/۰۳/۱۶', matchCount: 0 }]);
+  }, []);
+
+  const removeRadar = useCallback((id: string) => {
+    setRadars(prev => prev.filter(r => r.id !== id));
+  }, []);
+
+  const toggleRadarActive = useCallback((id: string) => {
+    setRadars(prev => prev.map(r => r.id === id ? { ...r, isActive: !r.isActive } : r));
+  }, []);
+
   const getUserById = useCallback((id: string) => users.find(u => u.id === id), [users]);
   const getListingById = useCallback((id: number) => listings.find(l => l.id === id), [listings]);
 
@@ -191,7 +230,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
     <AppContext.Provider value={{
       listings, transactions, users, tickets, favorites, notifications, disputes, auditLog, currentUser,
       updateListingStatus, addListing, updateTransactionStatus, createTransaction,
-      updateUserKyc, suspendUser, blacklistUser,
+      updateUserKyc, suspendUser, blacklistUser, addUser,
+      radars, addRadar, removeRadar, toggleRadarActive,
       toggleFavorite, isFavorite, addNotificationSub, removeNotificationSub,
       createDispute, resolveDispute, addTicketMessage,
       getUserById, getListingById,

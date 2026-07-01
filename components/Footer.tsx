@@ -18,6 +18,7 @@ export default function Footer() {
               <Link href="/listings" className="block text-divar-muted hover:text-brand-500 transition-colors cursor-pointer">آگهی‌های وام</Link>
               <Link href="/banks" className="block text-divar-muted hover:text-brand-500 transition-colors cursor-pointer">بانک‌ها</Link>
               <Link href="/rules" className="block text-divar-muted hover:text-brand-500 transition-colors cursor-pointer">قوانین</Link>
+              <Link href="/blog" className="block text-divar-muted hover:text-brand-500 transition-colors cursor-pointer">وبلاگ</Link>
             </div>
           </div>
           <div>

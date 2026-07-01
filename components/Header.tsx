@@ -31,6 +31,7 @@ export default function Header() {
     { href: '/listings', label: 'آگهی‌های وام' },
     { href: '/banks', label: 'بانک‌های تحت پوشش' },
     { href: '/rules', label: 'قوانین (Escrow)' },
+    { href: '/blog', label: 'وبلاگ' },
     { href: '/support', label: 'پشتیبانی' },
     ...(isAdminOrOperator ? [{ href: '/admin', label: 'پنل مدیریت' }] : []),
   ];
@@ -100,11 +101,11 @@ export default function Header() {
                 <span className="hidden sm:block">ورود / ثبت‌نام</span>
               </button>
             ) : (
-              <Link href="/dashboard" className="flex items-center text-divar-muted hover:text-divar-text transition group">
+              <Link href={isAdminOrOperator ? '/admin' : '/dashboard'} className="flex items-center text-divar-muted hover:text-divar-text transition group">
                 <div className="w-8 h-8 rounded-full bg-brand-900 text-brand-500 flex items-center justify-center border border-brand-600 md:ml-2">
                   <i className="fa-solid fa-user-check" />
                 </div>
-                <span className="hidden sm:block">داشبورد من</span>
+                <span className="hidden sm:block">{isAdminOrOperator ? 'پنل مدیریت' : 'داشبورد من'}</span>
               </Link>
             )}
 
@@ -170,12 +171,12 @@ export default function Header() {
                 </button>
               ) : (
                 <Link
-                  href="/dashboard"
+                  href={isAdminOrOperator ? '/admin' : '/dashboard'}
                   onClick={() => setMenuOpen(false)}
                   className="w-full bg-divar-bg border border-divar-border text-divar-text py-3 rounded-lg text-sm font-medium transition hover:bg-divar-surfaceHover flex items-center justify-center gap-2"
                 >
                   <i className="fa-solid fa-user-check" />
-                  داشبورد من
+                  {isAdminOrOperator ? 'پنل مدیریت' : 'داشبورد من'}
                 </Link>
               )}
             </div>

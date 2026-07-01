@@ -8,10 +8,10 @@ import { useApp } from '@/components/AppContext';
 import StatusBadge from '@/components/StatusBadge';
 import StepProgress from '@/components/StepProgress';
 import TransactionTimeline from '@/components/TransactionTimeline';
-import { Transaction, transactionStatusLabels } from '@/data/types';
+import { Transaction, transactionStatusLabels, LoanType } from '@/data/types';
 import ListingCard from '@/components/ListingCard';
 
-type Tab = 'requests' | 'ads' | 'favorites' | 'tickets' | 'kyc';
+type Tab = 'requests' | 'ads' | 'favorites' | 'radar' | 'tickets' | 'kyc';
 
 export default function DashboardPage() {
   const auth = useAuth();
@@ -21,6 +21,8 @@ export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState<Tab>('requests');
   const [selectedTrx, setSelectedTrx] = useState<Transaction | null>(null);
   const [openTicket, setOpenTicket] = useState<string | null>(null);
+  const [showRadarForm, setShowRadarForm] = useState(false);
+  const [radarForm, setRadarForm] = useState({ title: '', minAmount: '', maxAmount: '', installments: '', maxInterest: '', bank: '', loanType: '' as LoanType | '', city: '' });
 
   useEffect(() => {
     if (!auth.isLoggedIn) {
@@ -39,6 +41,7 @@ export default function DashboardPage() {
     { id: 'requests', label: 'درخواست‌های خرید', shortLabel: 'درخواست‌ها', icon: 'fa-file-invoice-dollar' },
     { id: 'ads', label: 'آگهی‌های من', shortLabel: 'آگهی‌ها', icon: 'fa-bullhorn' },
     { id: 'favorites', label: 'علاقه‌مندی‌ها', shortLabel: 'علاقه‌مندی', icon: 'fa-heart' },
+    { id: 'radar', label: 'رادار وام', shortLabel: 'رادار', icon: 'fa-satellite-dish' },
     { id: 'tickets', label: 'تیکت‌های پشتیبانی', shortLabel: 'تیکت‌ها', icon: 'fa-headset' },
     { id: 'kyc', label: 'اطلاعات هویتی', shortLabel: 'هویتی', icon: 'fa-id-card' },
   ];
@@ -96,7 +99,7 @@ export default function DashboardPage() {
         <div className="bg-divar-surface border border-divar-border rounded-xl overflow-hidden">
           <div className="flex overflow-x-auto scrollbar-hide">
             {tabs.map(tab => (
-              <button key={tab.id} onClick={() => { setActiveTab(tab.id); setSelectedTrx(null); setOpenTicket(null); }}
+              <button key={tab.id} onClick={() => { setActiveTab(tab.id); setSelectedTrx(null); setOpenTicket(null); setShowRadarForm(false); }}
                 className={`flex-1 min-w-[25%] flex flex-col items-center gap-1 py-3 px-2 text-center transition relative ${activeTab === tab.id ? 'text-divar-text' : 'text-divar-muted'}`}>
                 <i className={`fa-solid ${tab.icon} text-base ${activeTab === tab.id ? 'text-brand-400' : ''}`} />
                 <span className="text-[10px] font-medium whitespace-nowrap">{tab.shortLabel}</span>
@@ -122,7 +125,7 @@ export default function DashboardPage() {
             </div>
             <nav className="flex flex-col text-sm">
               {tabs.map(tab => (
-                <button key={tab.id} onClick={() => { setActiveTab(tab.id); setSelectedTrx(null); setOpenTicket(null); }}
+                <button key={tab.id} onClick={() => { setActiveTab(tab.id); setSelectedTrx(null); setOpenTicket(null); setShowRadarForm(false); }}
                   className={`text-right p-4 transition border-l-4 ${activeTab === tab.id ? 'text-divar-text bg-divar-bg border-brand-500' : 'text-divar-muted hover:text-divar-text hover:bg-divar-bg border-transparent'}`}>
                   <i className={`fa-solid ${tab.icon} w-5 ml-2 text-center`} />{tab.label}
                 </button>
@@ -286,6 +289,197 @@ export default function DashboardPage() {
                   </div>
                 );
               })()}
+            </div>
+          )}
+
+          {/* RADAR TAB */}
+          {activeTab === 'radar' && (
+            <div>
+              <div className="flex justify-between items-center mb-5 gap-3">
+                <div>
+                  <h2 className="text-base md:text-lg font-bold text-divar-text flex items-center gap-2">
+                    <i className="fa-solid fa-satellite-dish text-brand-500" /> رادار وام
+                  </h2>
+                  <p className="text-xs text-divar-muted mt-0.5">وقتی وام مورد نظرت پیدا بشه، بهت اطلاع می‌دیم</p>
+                </div>
+                <button
+                  onClick={() => setShowRadarForm(true)}
+                  className="bg-brand-600 hover:bg-brand-500 text-white px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 flex-shrink-0 cursor-pointer"
+                >
+                  <i className="fa-solid fa-plus" /> رادار جدید
+                </button>
+              </div>
+
+              {/* Active radars */}
+              {(() => {
+                const myRadars = app.radars.filter(r => r.userId === (app.currentUser?.id ?? ''));
+                return myRadars.length === 0 ? (
+                  <div className="bg-divar-bg border border-dashed border-divar-border rounded-2xl p-10 text-center">
+                    <div className="w-16 h-16 mx-auto bg-brand-500/10 rounded-2xl flex items-center justify-center mb-4">
+                      <i className="fa-solid fa-satellite-dish text-brand-500 text-2xl" />
+                    </div>
+                    <h3 className="text-sm font-bold text-divar-text mb-1">رادار فعالی ندارید</h3>
+                    <p className="text-xs text-divar-muted mb-4 leading-relaxed">معیارهای وام مورد نظرتان را وارد کنید تا به محض ثبت آگهی مشابه، اعلان دریافت کنید.</p>
+                    <button onClick={() => setShowRadarForm(true)} className="bg-brand-600 hover:bg-brand-500 text-white px-5 py-2.5 rounded-xl text-xs font-bold transition cursor-pointer">
+                      <i className="fa-solid fa-plus ml-1" /> اولین رادار را بسازید
+                    </button>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {myRadars.map(radar => (
+                      <div key={radar.id} className={`bg-divar-bg border rounded-2xl p-4 transition ${radar.isActive ? 'border-divar-border' : 'border-dashed border-divar-border opacity-60'}`}>
+                        <div className="flex justify-between items-start mb-3">
+                          <div className="flex items-center gap-2">
+                            <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${radar.isActive ? 'bg-brand-500/10' : 'bg-divar-surface'}`}>
+                              <i className={`fa-solid fa-satellite-dish text-sm ${radar.isActive ? 'text-brand-500' : 'text-divar-muted'}`} />
+                            </div>
+                            <div>
+                              <div className="text-sm font-bold text-divar-text">{radar.title}</div>
+                              <div className="text-[10px] text-divar-muted">{radar.createdAt}</div>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            {radar.matchCount !== undefined && radar.matchCount > 0 && (
+                              <span className="bg-brand-500/10 text-brand-600 dark:text-brand-400 text-[10px] font-bold px-2 py-1 rounded-lg">
+                                {radar.matchCount} آگهی مشابه
+                              </span>
+                            )}
+                            <button onClick={() => app.toggleRadarActive(radar.id)} className={`text-[10px] font-bold px-2 py-1 rounded-lg border transition cursor-pointer ${radar.isActive ? 'bg-green-50 text-green-700 border-green-200 dark:bg-green-900/20 dark:text-green-400 dark:border-green-800' : 'bg-divar-surface text-divar-muted border-divar-border'}`}>
+                              {radar.isActive ? 'فعال' : 'غیرفعال'}
+                            </button>
+                            <button onClick={() => alert.showConfirm('حذف رادار', `رادار «${radar.title}» حذف شود؟`, () => { app.removeRadar(radar.id); alert.showAlert('حذف شد', 'رادار حذف شد.', 'success'); })} className="text-divar-muted hover:text-red-500 transition cursor-pointer">
+                              <i className="fa-solid fa-trash text-sm" />
+                            </button>
+                          </div>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {radar.minAmount && radar.maxAmount && (
+                            <span className="bg-divar-surface border border-divar-border text-divar-text text-[10px] px-2 py-1 rounded-lg flex items-center gap-1">
+                              <i className="fa-solid fa-money-bill text-brand-500 text-[9px]" />
+                              {radar.minAmount} – {radar.maxAmount} تومان
+                            </span>
+                          )}
+                          {radar.installments && (
+                            <span className="bg-divar-surface border border-divar-border text-divar-text text-[10px] px-2 py-1 rounded-lg flex items-center gap-1">
+                              <i className="fa-solid fa-calendar-days text-blue-500 text-[9px]" />
+                              تا {radar.installments} ماه
+                            </span>
+                          )}
+                          {radar.maxInterest && (
+                            <span className="bg-divar-surface border border-divar-border text-divar-text text-[10px] px-2 py-1 rounded-lg flex items-center gap-1">
+                              <i className="fa-solid fa-percent text-yellow-500 text-[9px]" />
+                              سود حداکثر {radar.maxInterest}
+                            </span>
+                          )}
+                          {radar.bank && (
+                            <span className="bg-divar-surface border border-divar-border text-divar-text text-[10px] px-2 py-1 rounded-lg flex items-center gap-1">
+                              <i className="fa-solid fa-building-columns text-indigo-500 text-[9px]" />
+                              {radar.bank}
+                            </span>
+                          )}
+                          {radar.city && (
+                            <span className="bg-divar-surface border border-divar-border text-divar-text text-[10px] px-2 py-1 rounded-lg flex items-center gap-1">
+                              <i className="fa-solid fa-location-dot text-red-500 text-[9px]" />
+                              {radar.city}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                );
+              })()}
+
+              {/* Radar form modal */}
+              {showRadarForm && (
+                <>
+                  <div className="fixed inset-0 bg-black/60 z-[100]" onClick={() => setShowRadarForm(false)} />
+                  <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-divar-surface border border-divar-border rounded-2xl p-6 w-[90%] max-w-[440px] z-[101] shadow-2xl max-h-[90vh] overflow-y-auto">
+                    <div className="flex items-center gap-3 mb-5">
+                      <div className="w-10 h-10 bg-brand-500/10 rounded-xl flex items-center justify-center">
+                        <i className="fa-solid fa-satellite-dish text-brand-500" />
+                      </div>
+                      <h3 className="text-lg font-bold text-divar-text">رادار جدید</h3>
+                    </div>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-xs text-divar-muted mb-1.5">نام رادار (برای شناسایی خودتان)</label>
+                        <input value={radarForm.title} onChange={e => setRadarForm(p => ({...p, title: e.target.value}))} placeholder="مثلا: رادار رسالت تهران" className="w-full bg-divar-bg border border-divar-border text-divar-text rounded-xl py-2.5 px-4 text-sm focus:outline-none focus:border-brand-500 transition" />
+                      </div>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-xs text-divar-muted mb-1.5">حداقل مبلغ (تومان)</label>
+                          <input value={radarForm.minAmount} onChange={e => setRadarForm(p => ({...p, minAmount: e.target.value}))} placeholder="مثلا: 100,000,000" className="w-full bg-divar-bg border border-divar-border text-divar-text rounded-xl py-2.5 px-3 text-xs focus:outline-none focus:border-brand-500 transition font-mono" dir="ltr" />
+                        </div>
+                        <div>
+                          <label className="block text-xs text-divar-muted mb-1.5">حداکثر مبلغ (تومان)</label>
+                          <input value={radarForm.maxAmount} onChange={e => setRadarForm(p => ({...p, maxAmount: e.target.value}))} placeholder="مثلا: 300,000,000" className="w-full bg-divar-bg border border-divar-border text-divar-text rounded-xl py-2.5 px-3 text-xs focus:outline-none focus:border-brand-500 transition font-mono" dir="ltr" />
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-xs text-divar-muted mb-1.5">اقساط (ماه)</label>
+                          <input value={radarForm.installments} onChange={e => setRadarForm(p => ({...p, installments: e.target.value}))} placeholder="مثلا: 60" className="w-full bg-divar-bg border border-divar-border text-divar-text rounded-xl py-2.5 px-3 text-xs focus:outline-none focus:border-brand-500 transition" dir="ltr" />
+                        </div>
+                        <div>
+                          <label className="block text-xs text-divar-muted mb-1.5">حداکثر نرخ سود</label>
+                          <select value={radarForm.maxInterest} onChange={e => setRadarForm(p => ({...p, maxInterest: e.target.value}))} className="w-full bg-divar-bg border border-divar-border text-divar-text rounded-xl py-2.5 px-3 text-xs focus:outline-none focus:border-brand-500 transition cursor-pointer">
+                            <option value="">مهم نیست</option>
+                            <option value="۲٪">۲٪ (قرض‌الحسنه)</option>
+                            <option value="۴٪">۴٪</option>
+                            <option value="۱۰٪">۱۰٪</option>
+                            <option value="۱۸٪">۱۸٪</option>
+                            <option value="۲۲٪">۲۲٪</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-xs text-divar-muted mb-1.5">بانک (اختیاری)</label>
+                          <select value={radarForm.bank} onChange={e => setRadarForm(p => ({...p, bank: e.target.value}))} className="w-full bg-divar-bg border border-divar-border text-divar-text rounded-xl py-2.5 px-3 text-xs focus:outline-none focus:border-brand-500 transition cursor-pointer">
+                            <option value="">همه بانک‌ها</option>
+                            <option value="رسالت">رسالت</option>
+                            <option value="مهر ایران">مهر ایران</option>
+                            <option value="جاویدان">جاویدان</option>
+                            <option value="بانک ملت">بانک ملت</option>
+                            <option value="وام مسکن">وام مسکن</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-xs text-divar-muted mb-1.5">شهر (اختیاری)</label>
+                          <input value={radarForm.city} onChange={e => setRadarForm(p => ({...p, city: e.target.value}))} placeholder="مثلا: تهران" className="w-full bg-divar-bg border border-divar-border text-divar-text rounded-xl py-2.5 px-3 text-xs focus:outline-none focus:border-brand-500 transition" />
+                        </div>
+                      </div>
+                      <div className="flex gap-3 pt-1">
+                        <button onClick={() => setShowRadarForm(false)} className="flex-1 bg-divar-bg border border-divar-border text-divar-text py-3 rounded-xl font-bold transition hover:bg-divar-surfaceHover cursor-pointer">انصراف</button>
+                        <button
+                          onClick={() => {
+                            if (!radarForm.minAmount || !radarForm.maxAmount) { alert.showAlert('خطا', 'لطفا حداقل مبلغ را وارد کنید.'); return; }
+                            app.addRadar({
+                              userId: app.currentUser?.id ?? '',
+                              title: radarForm.title || `رادار ${radarForm.bank || 'همه بانک‌ها'}`,
+                              minAmount: radarForm.minAmount,
+                              maxAmount: radarForm.maxAmount,
+                              installments: radarForm.installments,
+                              maxInterest: radarForm.maxInterest,
+                              bank: radarForm.bank,
+                              loanType: radarForm.loanType,
+                              city: radarForm.city,
+                              isActive: true,
+                            });
+                            setShowRadarForm(false);
+                            setRadarForm({ title: '', minAmount: '', maxAmount: '', installments: '', maxInterest: '', bank: '', loanType: '', city: '' });
+                            alert.showAlert('رادار فعال شد', 'رادار شما با موفقیت ثبت شد. به محض ثبت آگهی مشابه، اعلان دریافت می‌کنید.', 'success');
+                          }}
+                          className="flex-1 bg-brand-600 hover:bg-brand-500 text-white py-3 rounded-xl font-bold transition cursor-pointer"
+                        >
+                          ثبت رادار
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
           )}
 

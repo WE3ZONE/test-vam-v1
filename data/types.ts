@@ -44,6 +44,9 @@ export interface User {
   isBlacklisted: boolean;
   createdAt: string;
   city: string;
+  kycRejectionReason?: string;
+  suspendReason?: string;
+  blacklistReason?: string;
 }
 
 export interface Listing {
@@ -112,6 +115,22 @@ export interface NotificationSubscription {
   maxAmount: string;
   city: string;
   createdAt: string;
+}
+
+export interface Radar {
+  id: string;
+  userId: string;
+  title: string;
+  minAmount: string;
+  maxAmount: string;
+  installments: string;
+  maxInterest: string;
+  bank: string;
+  loanType: LoanType | '';
+  city: string;
+  isActive: boolean;
+  createdAt: string;
+  matchCount?: number;
 }
 
 export interface Favorite {
